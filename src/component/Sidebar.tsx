@@ -5,6 +5,7 @@ import { NavbarBrand } from 'react-bootstrap';
 import '../styles/Sidebar.css';
 import { SidebarHeader, Typography } from './Typography';
 import { NavLink } from 'react-router-dom';
+import { Logo } from './Logo';
 
 const hexToRgba = (hex, alpha) => {
   const r = parseInt(hex.slice(1, 3), 16);
@@ -12,38 +13,6 @@ const hexToRgba = (hex, alpha) => {
   const b = parseInt(hex.slice(5, 7), 16);
 
   return `rgba(${r}, ${g}, ${b}, ${alpha})`;
-};
-
-export interface LogoProps {
-  size?: number;
-  stroke?: string;
-  fill?: string;
-  backgroundColor?: string;
-}
-
-/**
- * Logo component displays a customizable cross icon with optional size, color, and background.
- *
- * @param {number} size - The size of the logo icon.
- * @param {string} stroke - The stroke color of the icon.
- * @param {string} backgroundColor - The background color of the icon.
- */
-export const Logo: React.FC<LogoProps> = ({ 
-  size = 40,
-  stroke = 'white',
-  backgroundColor = '#24C38C',
-  fill = 'transparent',
-  ...props 
-}): JSX.Element => {
-  const logoStyle: React.CSSProperties = {
-    display: 'inline-block',
-    backgroundColor,
-    padding: `${size * 0.15}px`,
-  };
-
-  return (
-    <Cross size={size} stroke={stroke} fill={fill} className='rounded-full' style={logoStyle} {...props}/>
-  );
 };
 
 const menuItems = [
