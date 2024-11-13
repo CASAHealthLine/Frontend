@@ -114,19 +114,12 @@ export const Sidebar = () => {
               </Typography>
             </div>
             {menuItems.map((item, index) => (
-              <NavLink
-              key={index}
-              to={item.to}
-              className={({ isActive }) => (isActive ? "active-menu-item" : "")} // Thêm class khi active
-              ele
-            >
               <MenuItem
                 icon={item.icon}
-                style={{ color: isActive ? '#00796b' : 'inherit', backgroundColor: isActive ? '#e0f7fa' : 'transparent' }}
+                component={<NavLink to={item.to} />}
               >
                 {item.label}
               </MenuItem>
-            </NavLink>
             ))}
           </Menu>
 
