@@ -17,6 +17,7 @@ const hexToRgba = (hex, alpha) => {
 export interface LogoProps {
   size?: number;
   stroke?: string;
+  fill?: string;
   backgroundColor?: string;
 }
 
@@ -31,6 +32,7 @@ export const Logo: React.FC<LogoProps> = ({
   size = 40,
   stroke = 'white',
   backgroundColor = '#24C38C',
+  fill = 'transparent',
   ...props 
 }): JSX.Element => {
   const logoStyle: React.CSSProperties = {
@@ -40,7 +42,7 @@ export const Logo: React.FC<LogoProps> = ({
   };
 
   return (
-    <Cross size={size} stroke={stroke} className='rounded-full' style={logoStyle} {...props}/>
+    <Cross size={size} stroke={stroke} fill={fill} className='rounded-full' style={logoStyle} {...props}/>
   );
 };
 
