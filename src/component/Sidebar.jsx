@@ -16,22 +16,16 @@ const hexToRgba = (hex, alpha) => {
 export const Sidebar = () => {
   const [collapsed, setCollapsed] = useState(false);
 
-  const [oldWidth, setOldWidth] = useState(0);
-
   useEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth;
-      setOldWidth((prevOldWidth) => {
-        if (width > 576 && width < 768) {
-          if (!(prevOldWidth > 576 && prevOldWidth < 768)) {
-            setCollapsed(true);
-          }
-        } else if (width >= 768) {
-          setCollapsed(false);
-        }
+      if (width > 576 && width < 768) {
+        setCollapsed(true);
+      } else if (width >= 768) {
+        setCollapsed(false);
+      }
 
-        return width;
-      });
+      return width;
     };
 
     handleResize();
@@ -62,11 +56,17 @@ export const Sidebar = () => {
             </SidebarHeader>
           </NavbarBrand>
           <Menu>
-            <div className='px-6'>
+            <div className='px-6'
+              style={{
+                opacity: collapsed ? 0 : 0.7, 
+              }}
+            >
               <Typography
                 variant="body2"
                 fontWeight={600}
-                style={{ opacity: collapsed ? 0 : 0.7, letterSpacing: '0.5px' }}
+                style={{ 
+                  letterSpacing: '0.5px' 
+                }}
               >
                 TỔNG QUAN
               </Typography>
@@ -83,7 +83,10 @@ export const Sidebar = () => {
           </Menu>
 
           <Menu className='mt-auto'>
-            <div className='px-6'>
+            <div className='px-6'
+              style={{
+                opacity: collapsed ? 0 : 0.7, 
+              }}>
               <Typography
                 variant="body2"
                 fontWeight={600}
