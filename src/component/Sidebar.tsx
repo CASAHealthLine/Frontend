@@ -4,6 +4,7 @@ import { Cross, IdCard, LayoutGrid, Users, Network, ChartColumnBig, Stethoscope,
 import { NavbarBrand } from 'react-bootstrap';
 import '../styles/Sidebar.css';
 import { SidebarHeader, Typography } from './Typography';
+import { NavLink } from 'react-router-dom';
 
 const hexToRgba = (hex, alpha) => {
   const r = parseInt(hex.slice(1, 3), 16);
@@ -12,6 +13,47 @@ const hexToRgba = (hex, alpha) => {
 
   return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 };
+
+export interface LogoProps {
+  size?: number;
+  stroke?: string;
+  backgroundColor?: string;
+}
+
+/**
+ * Logo component displays a customizable cross icon with optional size, color, and background.
+ *
+ * @param {number} size - The size of the logo icon.
+ * @param {string} stroke - The stroke color of the icon.
+ * @param {string} backgroundColor - The background color of the icon.
+ */
+export const Logo: React.FC<LogoProps> = ({ 
+  size = 40,
+  stroke = 'white',
+  backgroundColor = '#24C38C',
+  ...props 
+}): JSX.Element => {
+  const logoStyle: React.CSSProperties = {
+    display: 'inline-block',
+    backgroundColor,
+    padding: `${size * 0.15}px`,
+  };
+
+  return (
+    <Cross size={size} stroke={stroke} className='rounded-full' style={logoStyle} {...props}/>
+  );
+};
+
+const menuItems = [
+  { icon: <LayoutGrid />, to: '/', label: 'Trang chủ' },
+  { icon: <IdCard />, to: '/', label: 'Bệnh nhân' },
+  { icon: <IdCard />, to: '/', label: 'Thông tin' },
+  { icon: <Users />, to: '/', label: 'Hàng đợi' },
+  { icon: <Network />, to: '/', label: 'Nhân viên' },
+  { icon: <ChartColumnBig />, to: '/', label: 'Thống kê' },
+  { icon: <Stethoscope />, to: '/', label: 'Phòng khám' },
+  { icon: <PillBottle />, to: '/', label: 'Xét nghiệm' },
+];
 
 export const Sidebar = () => {
   const [collapsed, setCollapsed] = useState(false);
@@ -46,7 +88,7 @@ export const Sidebar = () => {
         <div className='gap-y-6 sidebar-container h-full'>
           <NavbarBrand href="/" className='justify-center place-items-center min-h-16 h-16' >
             <SidebarHeader 
-              logo={<Cross size={40} stroke='white' className='rounded-full p-2 logo'/>}
+              logo={<Logo size={40} stroke='white'/>}
               title='CASA HealthLine'
               style={{
                 width: '200px',
@@ -71,15 +113,21 @@ export const Sidebar = () => {
                 TỔNG QUAN
               </Typography>
             </div>
-            <MenuItem 
-              icon={<LayoutGrid />}>Trang chủ</MenuItem>
-            <MenuItem icon={<IdCard />}>Bệnh nhân</MenuItem>
-            <MenuItem icon={<IdCard />}>Thông tin</MenuItem>
-            <MenuItem icon={<Users />}>Hàng đợi</MenuItem>
-            <MenuItem icon={<Network />}>Nhân viên</MenuItem>
-            <MenuItem icon={<ChartColumnBig />}>Thống kê</MenuItem>
-            <MenuItem icon={<Stethoscope />}>Phòng khám</MenuItem>
-            <MenuItem icon={<PillBottle />}>Xét nghiệm</MenuItem>
+            {menuItems.map((item, index) => (
+              <NavLink
+              key={index}
+              to={item.to}
+              className={({ isActive }) => (isActive ? "active-menu-item" : "")} // Thêm class khi active
+              ele
+            >
+              <MenuItem
+                icon={item.icon}
+                style={{ color: isActive ? '#00796b' : 'inherit', backgroundColor: isActive ? '#e0f7fa' : 'transparent' }}
+              >
+                {item.label}
+              </MenuItem>
+            </NavLink>
+            ))}
           </Menu>
 
           <Menu className='mt-auto'>
@@ -95,7 +143,7 @@ export const Sidebar = () => {
                 KHÁC
               </Typography>
             </div>
-            <MenuItem icon={<Settings />}>Cài đặt</MenuItem>
+            <MenuItem icon={<Settings />} component={<NavLink to={'/'} />}>Cài đặt</MenuItem>
             <MenuItem 
               icon={<LogOut stroke={logoutColor}/>}
               style={{

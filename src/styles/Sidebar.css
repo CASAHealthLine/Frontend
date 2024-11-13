@@ -4,11 +4,6 @@
 
 .navbar-brand {
   display: flex;
-
-  .logo {
-    display: 'inline-block';
-    background-color: #24C38C;
-  }
 }
 
 .sidebar-container {
