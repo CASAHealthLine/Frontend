@@ -2,3 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+:root{
+    --primary-text-color: #171717;
+    --primary-bg-color: #24c38c;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
