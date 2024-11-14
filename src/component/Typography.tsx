@@ -124,7 +124,13 @@ export const SidebarHeader: React.FC<SidebarHeaderProps> = ({ logo, title, displ
       >
         {logo}
         {displayTitle && (
-          <Typography variant="subtitle1" fontWeight={700} color="var(--primary-text-color);">
+          <Typography 
+            variant="subtitle1" 
+            fontWeight={700} 
+            style={{
+              textWrap: 'wrap',
+            }}
+          >
             {title}
           </Typography>
         )}
@@ -133,10 +139,14 @@ export const SidebarHeader: React.FC<SidebarHeaderProps> = ({ logo, title, displ
   );
 };
 
-export const Typography: React.FC<TypographyProps> = ({ variant = 'body1', children, ...rest }) => {
+export const Typography: React.FC<TypographyProps> = ({ variant = 'body1', children, style, ...rest }) => {
   return (
     <StyledTypography variant={variant} {...rest} style={{
       width: '102px',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+      textWrap: 'nowrap',
+      ...style,
     }}>
       {children}
     </StyledTypography>

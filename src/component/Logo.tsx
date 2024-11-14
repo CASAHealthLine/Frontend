@@ -19,7 +19,7 @@ export interface LogoProps {
 export const Logo: React.FC<LogoProps> = ({ 
     size = 40,
     stroke = 'white',
-    backgroundColor = '#24C38C',
+    backgroundColor = 'var(--primary-bg-color)',
     fill = 'transparent',
     ...props 
 }): JSX.Element => {

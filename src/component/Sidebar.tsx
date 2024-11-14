@@ -1,30 +1,68 @@
 import React, { useState, useEffect }from 'react';
 import { Sidebar as ProSidebar, Menu, MenuItem, SubMenu, menuClasses } from 'react-pro-sidebar';
-import { Cross, IdCard, LayoutGrid, Users, Network, ChartColumnBig, Stethoscope, PillBottle, Settings, LogOut } from 'lucide-react';
+import { IdCard, LayoutGrid, Users, Network, ChartColumnBig, Stethoscope, PillBottle, Settings, LogOut } from 'lucide-react';
 import { NavbarBrand } from 'react-bootstrap';
 import '../styles/Sidebar.css';
 import { SidebarHeader, Typography } from './Typography';
 import { NavLink } from 'react-router-dom';
 import { Logo } from './Logo';
 
-const hexToRgba = (hex, alpha) => {
-  const r = parseInt(hex.slice(1, 3), 16);
-  const g = parseInt(hex.slice(3, 5), 16);
-  const b = parseInt(hex.slice(5, 7), 16);
-
-  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
-};
-
 const menuItems = [
   { icon: <LayoutGrid />, to: '/', label: 'Trang chủ' },
-  { icon: <IdCard />, to: '/', label: 'Bệnh nhân' },
-  { icon: <IdCard />, to: '/', label: 'Thông tin' },
-  { icon: <Users />, to: '/', label: 'Hàng đợi' },
-  { icon: <Network />, to: '/', label: 'Nhân viên' },
-  { icon: <ChartColumnBig />, to: '/', label: 'Thống kê' },
-  { icon: <Stethoscope />, to: '/', label: 'Phòng khám' },
-  { icon: <PillBottle />, to: '/', label: 'Xét nghiệm' },
+  { icon: <IdCard />, to: '/patient', label: 'Bệnh nhân' },
+  { icon: <IdCard />, to: '/info', label: 'Thông tin' },
+  { icon: <Users />, to: '/queue', label: 'Hàng đợi' },
+  { icon: <Network />, to: '/staff', label: 'Nhân viên' },
+  { icon: <ChartColumnBig />, to: '/statistic', label: 'Thống kê' },
+  { icon: <Stethoscope />, to: '/rooms', label: 'Phòng khám' },
+  { icon: <PillBottle />, to: '/test', label: 'Xét nghiệm' },
 ];
+
+const StyledMenu = ({ children, collapsed, ...props }) => {
+  return (
+    <Menu
+      menuItemStyles={{
+        label: () => {
+          return {
+            display: collapsed ? 'none' : 'block',
+          };
+        },
+        icon: () => {
+          return {
+            marginRight: 0,
+          };
+        },
+      }}
+      {...props}
+    >
+      {children}
+    </Menu>
+  );
+}
+
+const StyledMenuItem = ({ children, icon, to, ...props }) => {
+  const selectedColor = 'var(--primary-bg-color)';
+  return (
+    <NavLink to={to}
+      style={{
+        color: 'inherit',
+        textDecoration: 'none',
+      }}
+    >
+      {({isActive}) => (
+        <MenuItem icon={icon}
+          style={{
+            color: isActive ? selectedColor : 'inherit',
+          }}
+          component={<div className='flex-row gap-2.5 justify-center'></div>}
+          {...props}
+        >
+          {children}
+        </MenuItem>
+      )}
+    </NavLink>
+  );
+};
 
 export const Sidebar = () => {
   const [collapsed, setCollapsed] = useState(false);
@@ -54,11 +92,12 @@ export const Sidebar = () => {
         collapsed={collapsed}
         breakPoint="sm"
         width='210px'
-        className='text-base font-medium h-dvh'
+        className='text-base font-medium relative inset-y-0 left-0'
+        transitionDuration={0}
       >
-        <div className='gap-y-6 sidebar-container h-full'>
+        <div className='relative gap-y-6 sidebar-container py-2.5 h-full'>
           <NavbarBrand href="/" className='justify-center place-items-center min-h-16 h-16' >
-            <SidebarHeader 
+            <SidebarHeader
               logo={<Logo size={40} stroke='white'/>}
               title='CASA HealthLine'
               style={{
@@ -68,53 +107,42 @@ export const Sidebar = () => {
             >
             </SidebarHeader>
           </NavbarBrand>
-          <Menu>
-            <div className='px-6'
-              style={{
-                opacity: collapsed ? 0 : 0.7, 
+          <StyledMenu collapsed={collapsed}>
+            <Typography
+              variant="body2"
+              fontWeight={600}
+              style={{ 
+                letterSpacing: '0.5px',
+                color: collapsed ? 'transparent' : '#969696', 
               }}
+              className='px-6 w-auto'
             >
-              <Typography
-                variant="body2"
-                fontWeight={600}
-                style={{ 
-                  letterSpacing: '0.5px' 
-                }}
-              >
-                TỔNG QUAN
-              </Typography>
-            </div>
+              TỔNG QUAN
+            </Typography>
             {menuItems.map((item, index) => (
-              <MenuItem
-                icon={item.icon}
-                component={<NavLink to={item.to} />}
-              >
-                {item.label}
-              </MenuItem>
+              <StyledMenuItem key={index} icon={item.icon} to={item.to}>{item.label}</StyledMenuItem>
             ))}
-          </Menu>
+          </StyledMenu>
 
-          <Menu className='mt-auto'>
-            <div className='px-6'
-              style={{
-                opacity: collapsed ? 0 : 0.7, 
-              }}>
-              <Typography
-                variant="body2"
-                fontWeight={600}
-                style={{ opacity: collapsed ? 0 : 0.7, letterSpacing: '0.5px' }}
-              >
-                KHÁC
-              </Typography>
-            </div>
-            <MenuItem icon={<Settings />} component={<NavLink to={'/'} />}>Cài đặt</MenuItem>
-            <MenuItem 
-              icon={<LogOut stroke={logoutColor}/>}
+          <StyledMenu className='mt-auto' collapsed={collapsed}>
+            <Typography
+              variant="body2"
+              fontWeight={600}
+              style={{ 
+                letterSpacing: '0.5px',
+                color: collapsed ? 'transparent' : '#969696', 
+              }}
+              className='px-6 w-auto'
+            >
+              KHÁC
+            </Typography>
+            <StyledMenuItem icon={<Settings />} to={'/setting'}>Cài đặt</StyledMenuItem>
+            <StyledMenuItem icon={<LogOut />} to={'/logout'}
               style={{
                 color: logoutColor,
               }}
-            >Đăng xuất</MenuItem>
-          </Menu>
+            >Đăng xuất</StyledMenuItem>
+          </StyledMenu>
         </div>
       </ProSidebar>
   );
