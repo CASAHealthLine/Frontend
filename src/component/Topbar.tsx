@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Nav } from 'react-bootstrap';
+import { Button, Nav } from 'react-bootstrap';
 import { Typography } from './Typography';
-import { Bell, Mail } from 'lucide-react';
+import { Bell, Mail, Menu } from 'lucide-react';
 import styled from '@emotion/styled';
 
 import '../styles/Topbar.css';
+import { useToggleSidebar, useBreakpointSidebar } from '../contexts/SidebarProvider';
 
 const TimeDisplay = () => {
     const [date, setDate] = useState(new Date());
@@ -50,7 +51,7 @@ const Divider = styled.div`
 `
 
 const IconNavLink = styled(Nav.Link)`
-    --icon-color: ${props => props.color ? props.color : 'white'};
+    --icon-color: ${props => props.color ? props.color : 'var(--secondary-text-color)'};
     color: var(--icon-color);
     cursor: pointer;
     padding: 8px;
@@ -61,21 +62,28 @@ const IconNavLink = styled(Nav.Link)`
 `
 
 export const Topbar = () => {
+  const {sidebarToggled, setSidebarToggled} = useToggleSidebar();
+  const {sidebarBreakpoint} = useBreakpointSidebar();
+
   return (
     <Nav 
-        className='h-16 justify-content-end gap-3.5 flex-row items-center'
+        className='h-16 justify-end gap-3.5 flex-row items-center shrink-0'
         style={{
             backgroundColor: 'var(--primary-bg-color)',
-            color: 'white',
+            color: 'var(--secondary-text-color)',
             padding: '0 20px',
         }}
     >
+        {sidebarBreakpoint && (
+            <Menu className='mr-auto cursor-pointer'
+                onClick={() => setSidebarToggled(!sidebarToggled)}/> 
+        )}
         <TimeDisplay />
         <Nav.Item>
-            <IconNavLink eventKey={1} color='white'><Mail /></IconNavLink>
+            <IconNavLink eventKey={1} ><Mail /></IconNavLink>
         </Nav.Item>
         <Nav.Item>
-            <IconNavLink eventKey={1} color='white'><Bell /></IconNavLink>
+            <IconNavLink eventKey={2} ><Bell /></IconNavLink>
         </Nav.Item>
         <Divider />
     </Nav>
