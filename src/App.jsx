@@ -1,12 +1,12 @@
-import { BrowserRouter, Routes } from 'react-router-dom';
-import { Sidebar } from './component/Sidebar';
+import { BrowserRouter } from 'react-router-dom';
+import { Banner } from './component/Banner';
 
 function App() {
   return (
     <BrowserRouter>
-      <Sidebar />
-      <Routes>
-      </Routes>
+      <div className='flex flex-row relative h-full'>
+        <Banner />
+      </div>
     </BrowserRouter>
   );
 }
