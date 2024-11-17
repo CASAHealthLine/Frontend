@@ -36,7 +36,7 @@ export default function Entry() {
         </div>
         {/* Form bên phải */}
         <div className="w-1/3 p-8 rounded-lg border-2 border-black">
-          <Tabs id="entry" activeKey={key} onSelect={handleTabSelect} className="nav-tabs">
+          <Tabs id="entry" activeKey={key} onSelect={handleTabSelect} className="nav-tabs nav-fill">
             <Tab eventKey="register" title="Đăng ký">
               <RegisterForm />
             </Tab>
