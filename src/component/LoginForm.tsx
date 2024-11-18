@@ -2,10 +2,20 @@ import React from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import '../index.css'
+import { useNavigate } from 'react-router-dom';
 export const LoginForm = () => {
+
+  const navigate = useNavigate(); // Khởi tạo hook navigate
+
+  // Hàm xử lý khi ấn "Hoàn thành"
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault(); // Ngăn chặn refresh trang
+    navigate('/home'); // Điều hướng tới Home.tsx
+  };
+
   return (
       <div className="rounded-lg p-6 bg-white max-md:ml-0 max-md:w-full">
-        <Form>
+        <Form onSubmit={handleSubmit}>
           <div className="mb-4">
             <input
               type="tel"
