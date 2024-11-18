@@ -10,7 +10,7 @@ export const LoginForm = () => {
   // Hàm xử lý khi ấn "Hoàn thành"
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault(); // Ngăn chặn refresh trang
-    navigate('/home'); // Điều hướng tới Home.tsx
+    navigate('/'); // Điều hướng tới Home.jsx
   };
 
   return (

@@ -5,7 +5,6 @@ import { Queueinfo } from '../component/Queueinfo';
 
 function Home() {
   return (
-    <BrowserRouter>
       <div className='flex flex-row relative h-full'>
         <Sidebar />
         <div className='flex flex-col relative w-full'>
@@ -15,7 +14,6 @@ function Home() {
           <Queueinfo/>
         </div>
       </div>
-    </BrowserRouter>
   );
 }
 
