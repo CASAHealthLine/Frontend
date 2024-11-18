@@ -60,3 +60,15 @@
   border: none;              /* Xóa viền */
   font-weight: bold; 
 }
+
+:root{
+  --primary-text-color: #171717;
+  --secondary-text-color: white;
+  --primary-bg-color: #24c38c;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
