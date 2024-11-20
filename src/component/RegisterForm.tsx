@@ -18,7 +18,15 @@ export const RegisterForm = () => {
                 <div className="mb-4">
                     <input
                         type="text"
-                        placeholder="Họ tên"
+                        placeholder="Họ"
+                        className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                        required
+                    />
+                </div>
+                <div className="mb-4">
+                    <input
+                        type="text"
+                        placeholder="Tên"
                         className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                         required
                     />
