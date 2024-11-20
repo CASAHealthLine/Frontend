@@ -35,7 +35,7 @@ export default function Entry() {
           <Banner />
         </div>
         {/* Form bên phải */}
-        <div className="w-1/3 rounded-lg border-2 border-black">
+        <div className="w-1/3 rounded-lg border-2 border-black mr-[2.5%]">
           <Tabs id="entry" activeKey={key} onSelect={handleTabSelect} className="nav-tabs nav-fill">
             <Tab eventKey="register" title="Đăng ký">
               <RegisterForm />

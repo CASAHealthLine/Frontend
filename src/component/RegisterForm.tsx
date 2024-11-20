@@ -1,9 +1,10 @@
-import React from 'react';
+import React , { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { useNavigate } from 'react-router-dom';
 import '../index.css'
 export const RegisterForm = () => {
+    const [validated, setValidated] = useState(false);
     const navigate = useNavigate();
 
     const handleSubmit = (e: React.FormEvent) => {
