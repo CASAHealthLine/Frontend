@@ -1,0 +1,74 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.image-component {
+  object-fit: contain;
+  flex-shrink: 0;
+  align-self: stretch;
+  margin-top: auto;
+  margin-bottom: auto;
+  width: 2.5rem;
+  border-radius: 1.5rem;
+  aspect-ratio: 1 / 1;
+}
+/* Button Xác nhận */
+.btn-custom {
+  background-color: #24C38C !important;
+  color: #FFFFFF !important;
+  border: none !important;
+  font-weight: bold !important;
+}
+
+.btn-custom:hover {
+  background-color: #1EA373 !important;/* Màu nền khi hover */
+  color: #FFFFFF !important;         /* Giữ nguyên màu chữ */
+  font-weight: bold !important;
+}
+
+/* Tabs mặc định */
+.nav-tabs .nav-link {
+  background-color: #24C38C; /* Màu nền */
+  color: #FFFFFF;            /* Màu chữ */
+  border: none;              /* Xóa viền mặc định */
+  font-weight: bold; 
+}
+
+.nav-tabs .nav-link:hover {
+  background-color: #1EA373; /* Màu nền khi hover */
+  color: #FFFFFF;            /* Màu chữ khi hover */
+  font-weight: bold; 
+}
+
+/* Tab đang được chọn */
+.nav-tabs .nav-link.active {
+  background-color: #FFFFFF; /* Nền trắng */
+  color: #000000;            /* Màu chữ đen */
+  text-decoration: underline; /* Gạch chân */
+  border: none;              /* Xóa viền */
+  font-weight: bold; 
+}
+
+:root{
+  --primary-text-color: #171717;
+  --secondary-text-color: white;
+  --primary-bg-color: #24c38c;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
