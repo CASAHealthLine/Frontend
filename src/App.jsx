@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Sidebar } from './component/Sidebar';
 import { Topbar } from './component/Topbar';
-import { Queueinfo } from './component/Queueinfo';
+import { StaffList } from './page/StaffList';
 
 function App() {
   return (
@@ -12,7 +12,7 @@ function App() {
           <Topbar />
           <Routes>
           </Routes>
-          <Queueinfo/>
+          <StaffList/>
         </div>
       </div>
     </BrowserRouter>
