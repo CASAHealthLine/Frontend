@@ -1,0 +1,7 @@
+table * {
+    @apply text-center
+}
+th div{
+    background-color: var(--primary-bg-color);
+    @apply text-white sm:rounded-md shadow-md m-1
+}
