@@ -1,10 +1,22 @@
 import React, { useState } from "react";
-import MedicalRecord from "../component/Patient/MedicalRecord";
 import PersonalInfo from "../component/Patient/PersonalInfo";
-import { FaUserCircle, FaCheckCircle } from "react-icons/fa";
+import MedicalRecord from "../component/Patient/MedicalRecord";
+import { FaUserCircle } from "react-icons/fa";
+import { MdCheckCircle } from "react-icons/md";
 
 const PatientDashboard = () => {
   const [activeSection, setActiveSection] = useState("personalInfo");
+
+  const patientInfo = {
+    name: "Nguyễn Văn A",
+    gender: "Nam",
+    dob: "01/03/2001",
+    address: "03 Trần Quốc Vượng, Dịch Vọng, Cầu Giấy, Hà Nội",
+    idNumber: "029182381821",
+    email: "vana@gmail.com",
+    phone: "0927318182",
+    occupation: "Tự Do",
+  };
 
   const styles = {
     container: {
@@ -13,6 +25,7 @@ const PatientDashboard = () => {
       margin: "20px auto",
       padding: "20px",
       backgroundColor: "#cecece",
+      borderRadius: "12px",
       boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
     },
     header: {
@@ -20,25 +33,32 @@ const PatientDashboard = () => {
       justifyContent: "space-between",
       alignItems: "center",
       marginBottom: "20px",
-      padding: "20px",
+      padding: "10px 20px",
+      backgroundColor: "#fff",
       borderRadius: "12px",
-      backgroundColor: "#f8f9fa",
-      borderBottom: "2px solid #e0e0e0",
+      boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
     },
     userDetails: {
       display: "flex",
       alignItems: "center",
+      gap: "16px",
     },
     userAvatar: {
-      marginRight: "20px",
+      fontSize: "48px",
+      color: "#6c757d",
     },
     userInfo: {
       lineHeight: "1.5",
     },
-    verificationStatus: {
+    userName: {
+      fontSize: "18px",
+      fontWeight: "bold",
+    },
+    verification: {
       display: "flex",
       alignItems: "center",
       gap: "8px",
+      fontSize: "16px",
       color: "#28a745",
       fontWeight: "bold",
     },
@@ -46,34 +66,28 @@ const PatientDashboard = () => {
       display: "flex",
       justifyContent: "space-between",
       marginBottom: "20px",
-      padding: "10px",
-      backgroundColor: "#fff",
+      backgroundColor: "#22b57f",
       borderRadius: "12px",
-      boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+      color: "#fff",
+      fontWeight: "bold",
     },
     tabButton: {
       flex: 1,
       textAlign: "center",
-      padding: "12px 16px",
-      fontWeight: "bold",
+      padding: "10px",
       cursor: "pointer",
-      border: "none",
-      backgroundColor: "transparent",
-      color: "#333",
-      position: "relative",
-      transition: "all 0.3s ease",
+      borderRadius: "12px",
+      transition: "background-color 0.3s ease",
     },
     activeTabButton: {
+      backgroundColor: "#fff",
       color: "#28a745",
-      fontWeight: "bold",
-      borderBottom: "3px solid #28a745",
     },
     content: {
       backgroundColor: "#fff",
       padding: "20px",
       borderRadius: "12px",
       boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
-      minHeight: "300px",
     },
   };
 
@@ -83,37 +97,24 @@ const PatientDashboard = () => {
       <div style={styles.header}>
         <div style={styles.userDetails}>
           <div style={styles.userAvatar}>
-            <FaUserCircle size={64} />
+            <FaUserCircle />
           </div>
           <div style={styles.userInfo}>
-            <h1>Nguyễn Văn B</h1>
-            <p>ID: 22021101</p>
-            <p>Giới Tính: Nam</p>
-            <p>Ngày Sinh: 01/03/2001</p>
+            <div style={styles.userName}>Nguyễn Văn B</div>
+            <div>ID: 22021101</div>
+            <div>Giới Tính: Nam</div>
+            <div>Ngày Sinh: 01/03/2001</div>
           </div>
         </div>
-        <div style={styles.verificationStatus}>
-          <p>Đã Xác Thực</p>
-          <div
-            style={{
-              width: "32px",
-              height: "32px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              backgroundColor: "#28a745",
-              borderRadius: "50%",
-              color: "#fff",
-            }}
-          >
-            <FaCheckCircle size={16} />
-          </div>
+        <div style={styles.verification}>
+          <MdCheckCircle />
+          Đã Xác Thực
         </div>
       </div>
 
       {/* Tab Navigation */}
       <div style={styles.tabNavigation}>
-        <button
+        <div
           style={{
             ...styles.tabButton,
             ...(activeSection === "personalInfo" ? styles.activeTabButton : {}),
@@ -121,8 +122,8 @@ const PatientDashboard = () => {
           onClick={() => setActiveSection("personalInfo")}
         >
           Thông Tin Cá Nhân
-        </button>
-        <button
+        </div>
+        <div
           style={{
             ...styles.tabButton,
             ...(activeSection === "medicalRecord" ? styles.activeTabButton : {}),
@@ -130,8 +131,8 @@ const PatientDashboard = () => {
           onClick={() => setActiveSection("medicalRecord")}
         >
           Hồ Sơ Bệnh Án
-        </button>
-        <button
+        </div>
+        <div
           style={{
             ...styles.tabButton,
             ...(activeSection === "status" ? styles.activeTabButton : {}),
@@ -139,19 +140,25 @@ const PatientDashboard = () => {
           onClick={() => setActiveSection("status")}
         >
           Trạng Thái
-        </button>
+        </div>
       </div>
 
       {/* Content Section */}
       <div style={styles.content}>
-        {activeSection === "personalInfo" && <PersonalInfo />}
-        {activeSection === "medicalRecord" && <MedicalRecord />}
-        {activeSection === "status" && (
-          <div>
-            <h2>Trạng Thái</h2>
-            <p>Trạng thái của bệnh nhân sẽ hiển thị tại đây.</p>
-          </div>
+        {activeSection === "personalInfo" && (
+          <PersonalInfo
+            name={patientInfo.name}
+            gender={patientInfo.gender}
+            dob={patientInfo.dob}
+            address={patientInfo.address}
+            idNumber={patientInfo.idNumber}
+            email={patientInfo.email}
+            phone={patientInfo.phone}
+            occupation={patientInfo.occupation}
+          />
         )}
+        {activeSection === "medicalRecord" && <MedicalRecord />}
+        {activeSection === "status" && <p>Trạng thái của bệnh nhân sẽ hiển thị tại đây.</p>}
       </div>
     </div>
   );
