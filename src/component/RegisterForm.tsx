@@ -30,7 +30,11 @@ export const RegisterForm = () => {
         }
 
         try {
+<<<<<<< HEAD
             const response = await fetch('http://127.0.0.1:8000/api/register', {
+=======
+            const response = await fetch('http://127.0.0.1:8000/register/', {
+>>>>>>> d9cad5f8af4cf419810ab09173dd43d134a11b21
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
