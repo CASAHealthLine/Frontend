@@ -4,9 +4,10 @@ import { FaHome, FaUser, FaCog, FaSignOutAlt, FaThLarge } from 'react-icons/fa';
 
 interface SidebarProps {
   setActiveSection: (section: string) => void;
+  activeSection: string; // New prop to track the active section
 }
 
-const PatientSlider: React.FC<SidebarProps> = ({ setActiveSection }) => {
+const PatientSlider: React.FC<SidebarProps> = ({ setActiveSection, activeSection }) => {
   const styles = {
     sidebar: {
       width: 'auto',
@@ -15,7 +16,7 @@ const PatientSlider: React.FC<SidebarProps> = ({ setActiveSection }) => {
       padding: '20px',
       display: 'flex',
       flexDirection: 'column',
-      height: '100vh', // Chiếm toàn bộ chiều cao màn hình
+      height: '100vh',
       boxSizing: 'border-box',
     },
     logoContainer: {
@@ -31,7 +32,7 @@ const PatientSlider: React.FC<SidebarProps> = ({ setActiveSection }) => {
       whiteSpace: 'nowrap',
     },
     nav: {
-      flexGrow: 1, // Đẩy các mục điều hướng lên trên
+      flexGrow: 1,
     },
     sectionTitle: {
       fontSize: '12px',
@@ -49,19 +50,22 @@ const PatientSlider: React.FC<SidebarProps> = ({ setActiveSection }) => {
       color: '#333',
       borderRadius: '4px',
       marginBottom: '5px',
-      transition: 'background-color 0.3s ease',
+      transition: 'background-color 0.3s ease, color 0.3s ease',
       whiteSpace: 'nowrap',
     },
     activeLink: {
-      backgroundColor: '#e6f7ff',
-      color: '#1890ff',
+      color: '#00bfa6', // Green color for active link
+      fontWeight: 'bold', // Make it bold
     },
     icon: {
       fontSize: '16px',
       marginRight: '10px',
     },
+    activeIcon: {
+      color: '#00bfa6', // Green color for active icon
+    },
     footer: {
-      marginTop: 'auto', // Đẩy phần footer xuống dưới
+      marginTop: 'auto',
     },
     logout: {
       color: '#ff4d4f',
@@ -79,16 +83,18 @@ const PatientSlider: React.FC<SidebarProps> = ({ setActiveSection }) => {
         <a
           href="#"
           onClick={() => setActiveSection('home')}
-          style={styles.navLink}
+          style={activeSection === 'home' ? { ...styles.navLink, ...styles.activeLink } : styles.navLink}
         >
-          <FaThLarge style={styles.icon} /> Trang chủ
+          <FaThLarge style={activeSection === 'home' ? { ...styles.icon, ...styles.activeIcon } : styles.icon} />
+          Trang chủ
         </a>
         <a
           href="#"
           onClick={() => setActiveSection('personalInfo')}
-          style={{ ...styles.navLink, ...styles.activeLink }}
+          style={activeSection === 'personalInfo' ? { ...styles.navLink, ...styles.activeLink } : styles.navLink}
         >
-          <FaUser style={styles.icon} /> Thông tin
+          <FaUser style={activeSection === 'personalInfo' ? { ...styles.icon, ...styles.activeIcon } : styles.icon} />
+          Thông tin
         </a>
       </nav>
       <div style={styles.footer}>
@@ -96,16 +102,18 @@ const PatientSlider: React.FC<SidebarProps> = ({ setActiveSection }) => {
         <a
           href="#"
           onClick={() => setActiveSection('settings')}
-          style={styles.navLink}
+          style={activeSection === 'settings' ? { ...styles.navLink, ...styles.activeLink } : styles.navLink}
         >
-          <FaCog style={styles.icon} /> Cài đặt
+          <FaCog style={activeSection === 'settings' ? { ...styles.icon, ...styles.activeIcon } : styles.icon} />
+          Cài đặt
         </a>
         <a
           href="#"
           onClick={() => setActiveSection('logout')}
-          style={{ ...styles.navLink, ...styles.logout }}
+          style={activeSection === 'logout' ? { ...styles.navLink, ...styles.activeLink, ...styles.logout } : { ...styles.navLink, ...styles.logout }}
         >
-          <FaSignOutAlt style={styles.icon} /> Đăng xuất
+          <FaSignOutAlt style={activeSection === 'logout' ? { ...styles.icon, ...styles.activeIcon } : styles.icon} />
+          Đăng xuất
         </a>
       </div>
     </div>
