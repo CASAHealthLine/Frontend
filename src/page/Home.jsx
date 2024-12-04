@@ -5,9 +5,6 @@ import { Queueinfo } from '../component/Queueinfo';
 import { useState } from 'react';
 import { StatisticsOverview } from '../component/StatisticsOverview';
 function Home() {
-  // State to toggle the visibility of Queueinfo
-  const [showQueueInfo, setShowQueueInfo] = useState(false);
-
   // Function to handle toggle
   const handleQueueToggle = () => {
     setShowQueueInfo((prev) => !prev);
@@ -19,9 +16,9 @@ function Home() {
       <div className='flex flex-col relative w-full'>
         <Topbar />
         <Routes>
-          {/* Add your routes here */}
+          <Route path="/statistic" element={<StatisticsOverview />} />
+          <Route path="/queue" element={<Queueinfo />} />
         </Routes>
-        <StatisticsOverview />
       </div>
     </div>
   );

@@ -12,15 +12,15 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path="/logout" element={<Entry />} />
 
         <Route path="/" element={<Home />} />
-        <Route path="/info" element={<Home />} />
-        <Route path="/queue" element={<Home />} />
-        <Route path="/patient" element={<Home />} />
-        <Route path="/staff" element={<Home />} />
-        <Route path="/statistic" element={<Home />} />
-        <Route path="/rooms" element={<Home />} />
-        <Route path="/test" element={<Home />} />
-        <Route path="/staff" element={<Home />} />
-        <Route path="/setting" element={<Home />} />
+        <Route path="/info/*" element={<Home />} />
+        <Route path="/queue/*" element={<Home />} />
+        <Route path="/patient/*" element={<Home />} />
+        <Route path="/staff/*" element={<Home />} />
+        <Route path="/statistic/*" element={<Home />} />
+        <Route path="/rooms/*" element={<Home />} />
+        <Route path="/test/*" element={<Home />} />
+        <Route path="/staff/*" element={<Home />} />
+        <Route path="/setting/*" element={<Home />} />
       </Routes>
     </Router>
   </React.StrictMode>

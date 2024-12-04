@@ -1,23 +1,68 @@
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import Stack from '@mui/material/Stack';
-import { Gauge } from '@mui/x-charts/Gauge';
+import { Gauge, gaugeClasses } from '@mui/x-charts/Gauge';
 import { BarChart } from '@mui/x-charts/BarChart';
+import '../index.css';
 export const StatisticsOverview = () => {
+    const [weekRange, setWeekRange] = useState("");
+
+    useEffect(() => {
+        const updateWeekRange = () => {
+            const today = new Date();
+            const dayOfWeek = today.getDay(); // 0 (Chủ nhật) -> 6 (Thứ bảy)
+            const monday = new Date(today);
+            const sunday = new Date(today);
+
+            // Tính ngày Thứ Hai và Chủ Nhật của tuần
+            monday.setDate(today.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1));
+            sunday.setDate(monday.getDate() + 6);
+
+            // Định dạng ngày dạng dd/mm
+            const formatDate = (date) =>
+                `${date.getDate()}/${date.getMonth() + 1}`;
+
+            setWeekRange(`${formatDate(monday)} - ${formatDate(sunday)}`);
+        };
+
+
+        updateWeekRange();
+    }, []);
+
+    const settings = {
+        width: 200,
+        height: 200,
+        value: 60,
+        startAngle: -135,
+        endAngle: 135,
+      };
+
     return (
         <div className="flex flex-col md:flex-row items-start justify-between min-h-screen pt-[2.5%]">
             <div className="max-w-md mx-auto">
                 <p className="text-xl text-center font-bold">Số bệnh nhân khám bệnh </p>
+                <div className="text-center">{weekRange}</div>
                 <BarChart
-                    xAxis={[{ scaleType: 'band', data: ['group A', 'group B', 'group C'] }]}
-                    series={[{ data: [4, 3, 5] }, { data: [1, 6, 3] }, { data: [2, 5, 6] }]}
-                    width={500}
+                    xAxis={[{ scaleType: 'band', data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] }]}
+                    series={[{ data: [2, 5, 1, 3, 6, 4, 7] }]}
+                    width={400}
                     height={300}
+                    borderRadius={10}
                 />
             </div>
             <div className=" max-w-md mx-auto">
                 <p className="text-xl text-center font-bold">Mức độ hoạt động bệnh viện </p>
-                <Stack direction={{ xs: 'column', md: 'row' }} spacing={{ xs: 1, md: 3 }}>
-                    <Gauge className="text-3xl font-bold " width={200} height={200} value={60} startAngle={-135} endAngle={135} />
+                <Stack direction={{ xs: 'column', md: 'row' }} spacing={{ xs: 1, md: 3 }} >
+                    <Gauge className="font-bold " 
+                    {...settings}
+                    sx={(theme) => ({
+                      [`& .${gaugeClasses.valueText}`]: {
+                        fontSize: 50,
+                      },
+                      [`& .${gaugeClasses.valueArc}`]: {
+                        fill: '#24c38c',
+                      },
+                    })} 
+                    />
                 </Stack>
             </div>
         </div>
