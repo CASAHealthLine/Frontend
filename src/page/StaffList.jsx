@@ -1,10 +1,11 @@
 import { Plus, Table } from "lucide-react";
 import { useEffect, useState } from "react";
+import "../styles/StaffList.css";
 
 export const StaffList = () => {
   return (
     <div className="m-2">
-      <div className="flex flex-row">
+      <div className="">
         <h5 className="text-center">Danh sách nhân viên</h5>
         <button type="button">
           <Plus />
