@@ -5,18 +5,16 @@ import { SidebarProvider } from './contexts/SidebarProvider';
 
 function App() {
   return (
-    <BrowserRouter>
-      <SidebarProvider>
-        <div className='flex flex-row relative h-full'>
-          <Sidebar />
-          <div className='flex flex-col relative w-full'>
-            <Topbar />
-            <Routes>
-            </Routes>
-          </div>
+    <SidebarProvider>
+      <div className='flex flex-row relative h-full'>
+        <Sidebar />
+        <div className='flex flex-col relative w-full'>
+          <Topbar />
+          <Routes>
+          </Routes>
         </div>
-      </SidebarProvider>
-    </BrowserRouter>
+      </div>
+    </SidebarProvider>
   );
 }
 
