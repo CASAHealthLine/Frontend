@@ -4,7 +4,6 @@ import { Typography } from './Typography';
 import { Bell, Mail, Menu } from 'lucide-react';
 import styled from '@emotion/styled';
 
-import '../styles/Topbar.css';
 import { useToggleSidebar, useBreakpointSidebar } from '../contexts/SidebarProvider';
 
 const TimeDisplay = () => {
