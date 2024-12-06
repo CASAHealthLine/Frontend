@@ -3,6 +3,8 @@ import Stack from '@mui/material/Stack';
 import { Gauge, gaugeClasses } from '@mui/x-charts/Gauge';
 import { BarChart } from '@mui/x-charts/BarChart';
 import '../index.css';
+import Button from 'react-bootstrap/Button';
+import totalUserData from '../data/totalUser.json';
 export const StatisticsOverview = () => {
     const [weekRange, setWeekRange] = useState("");
 
@@ -34,10 +36,26 @@ export const StatisticsOverview = () => {
         value: 60,
         startAngle: -135,
         endAngle: 135,
-      };
+    };
+
+    type UserData = {
+        name: string;
+        number: number;
+    };
+
+    const [data, setData] = useState<UserData[]>([]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const response = await fetch('/data/totalUser.json');
+            const jsonData: UserData[] = await response.json();
+            setData(jsonData);
+        };
+        fetchData();
+    }, []);
 
     return (
-        <div className="flex flex-col md:flex-row items-start justify-between min-h-screen pt-[2.5%]">
+        <div className="flex flex-col md:flex-row items-start justify-between pt-[2.5%]">
             <div className="max-w-md mx-auto">
                 <p className="text-xl text-center font-bold">Số bệnh nhân khám bệnh </p>
                 <div className="text-center">{weekRange}</div>
@@ -49,21 +67,34 @@ export const StatisticsOverview = () => {
                     borderRadius={10}
                 />
             </div>
+            <div className="max-w-md mx-auto">
+                <p className="text-xl text-center font-bold">Số người dùng CASA HealthLine</p>
+                <BarChart
+                    xAxis={[{ scaleType: 'band', data: data.map(item => item.name) }]}
+                    series={[{ data: data.map(item => item.number) }]}
+                    width={400}
+                    height={300}
+                    borderRadius={10}
+                />
+            </div>
             <div className=" max-w-md mx-auto">
                 <p className="text-xl text-center font-bold">Mức độ hoạt động bệnh viện </p>
                 <Stack direction={{ xs: 'column', md: 'row' }} spacing={{ xs: 1, md: 3 }} >
-                    <Gauge className="font-bold " 
-                    {...settings}
-                    sx={(theme) => ({
-                      [`& .${gaugeClasses.valueText}`]: {
-                        fontSize: 50,
-                      },
-                      [`& .${gaugeClasses.valueArc}`]: {
-                        fill: '#24c38c',
-                      },
-                    })} 
+                    <Gauge className="font-bold "
+                        {...settings}
+                        sx={(theme) => ({
+                            [`& .${gaugeClasses.valueText}`]: {
+                                fontSize: 50,
+                            },
+                            [`& .${gaugeClasses.valueArc}`]: {
+                                fill: '#24c38c',
+                            },
+                        })}
                     />
                 </Stack>
+                <div className="text-center">
+                    <Button className="btn btn-custom" type="submit">Chi tiết</Button>
+                </div>
             </div>
         </div>
     );

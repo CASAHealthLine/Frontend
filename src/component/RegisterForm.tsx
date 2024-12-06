@@ -6,8 +6,7 @@ import '../index.css'
 export const RegisterForm = () => {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
-        firstname: '',
-        lastname: '',
+        name: '',
         phone: '',
         email: '',
         password: '',
@@ -34,8 +33,7 @@ export const RegisterForm = () => {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    firstname: formData.firstname,
-                    lastname: formData.lastname,
+                    name: formData.name,
                     phone: formData.phone,
                     email: formData.email,
                     password: formData.password,
@@ -63,20 +61,9 @@ export const RegisterForm = () => {
                 <div className="mb-4">
                     <input
                         type="text"
-                        name="firstname"
-                        placeholder="Họ"
-                        value={formData.firstname}
-                        onChange={handleChange}
-                        className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-                        required
-                    />
-                </div>
-                <div className="mb-4">
-                    <input
-                        type="text"
-                        name="lastname"
-                        placeholder="Tên"
-                        value={formData.lastname}
+                        name="name"
+                        placeholder="Họ tên"
+                        value={formData.name}
                         onChange={handleChange}
                         className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                         required

@@ -4,6 +4,11 @@ import { Topbar } from '../component/Topbar';
 import { Queueinfo } from '../component/Queueinfo';
 import { useState } from 'react';
 import { StatisticsOverview } from '../component/StatisticsOverview';
+import { StaffList } from '../component/StaffList';
+import { PatientList } from '../component/PatientList';
+import { TestList } from '../component/TestList';
+import { QueueList } from '../component/QueueList';
+import { ClinicList } from '../component/ClinicList';
 function Home() {
   // Function to handle toggle
   const handleQueueToggle = () => {
@@ -19,6 +24,8 @@ function Home() {
           <Route path="/statistic" element={<StatisticsOverview />} />
           <Route path="/queue" element={<Queueinfo />} />
         </Routes>
+        
+        <TestList />
       </div>
     </div>
   );
