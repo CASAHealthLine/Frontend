@@ -4,9 +4,10 @@ import { IdCard, LayoutGrid, Users, Network, ChartColumnBig, Stethoscope, PillBo
 import { NavbarBrand } from 'react-bootstrap';
 import '../styles/Sidebar.css';
 import { SidebarHeader, Typography } from './Typography';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { Logo } from './Logo';
 import { useBreakpointSidebar, useToggleSidebar } from '../contexts/SidebarProvider';
+import api from '../api';
 
 const menuItems = [
   { icon: <LayoutGrid />, to: '/', label: 'Trang chủ' },
@@ -45,7 +46,8 @@ const logoutColor = '#FE5620';
 
 export const Sidebar = ({...props}: SidebarProps) => {
   const [collapsed, setCollapsed] = useState(false);
-  const {sidebarToggled, setSidebarToggled} = useToggleSidebar();
+  const { sidebarToggled, setSidebarToggled } = useToggleSidebar();
+  const navigate = useNavigate();
   const {setSidebarBreakpoint} = useBreakpointSidebar();
 
   useEffect(() => {
@@ -66,7 +68,7 @@ export const Sidebar = ({...props}: SidebarProps) => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const StyledMenuItem = ({ children, icon, to, ...props }) => {
+  const StyledMenuItem = ({ children, icon, to='', onClick=() => {}, ...props }) => {
     const selectedColor = 'var(--primary-bg-color)';
     return (
       <NavLink to={to}
@@ -74,7 +76,12 @@ export const Sidebar = ({...props}: SidebarProps) => {
           color: 'inherit',
           textDecoration: 'none',
         }}
-        onClick={() => setSidebarToggled(false)}
+        onClick={() => {
+          if (onClick) {
+            onClick();
+          }
+          setSidebarToggled(false);
+        }}
       >
         {({isActive}) => (
           <MenuItem icon={icon}
@@ -90,6 +97,17 @@ export const Sidebar = ({...props}: SidebarProps) => {
       </NavLink>
     );
   };
+
+  const handleLogout = async () => {
+    try {
+      await api.post('/auth/logout/');
+      localStorage.removeItem('access_token');
+      navigate('/login');
+    } catch (error) {
+      console.error('Logout failed:', error);
+      alert('Không thể đăng xuất. Vui lòng thử lại.');
+    }
+  }
 
   return (
       <ProSidebar
@@ -145,7 +163,8 @@ export const Sidebar = ({...props}: SidebarProps) => {
               KHÁC
             </Typography>
             <StyledMenuItem icon={<Settings />} to={'/setting'}>Cài đặt</StyledMenuItem>
-            <StyledMenuItem icon={<LogOut />} to={'/logout'}
+            <StyledMenuItem icon={<LogOut />}
+              onClick={handleLogout}
               style={{
                 color: logoutColor,
               }}
