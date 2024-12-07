@@ -3,12 +3,12 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { useNavigate } from 'react-router-dom';
 import '../index.css'
+import api from '../api';
 export const RegisterForm = () => {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
-        name: '',
+        displayname: '',
         phone: '',
-        email: '',
         password: '',
         confirmPassword: '',
     });
@@ -24,28 +24,20 @@ export const RegisterForm = () => {
         
         // Kiểm tra khớp mật khẩu
         if (formData.password !== formData.confirmPassword) {
-            setError("Mật khẩu không khớp. Vui lòng thử lại.");
+            setError("Mật khẩu không khớp. Vui lòng kiểm tra lại.");
             return;
         }
 
         try {
-            const response = await fetch('http://127.0.0.1:8000/register/', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    name: formData.name,
-                    phone: formData.phone,
-                    email: formData.email,
-                    password: formData.password,
-                }),
+            const response = await api.post('/auth/register/', {
+                display_name: formData.displayname,
+                username: formData.phone,
+                password: formData.password,
             });
 
-            if (response.ok) {
-                alert('Đăng ký thành công!');
+            if (response.status === 201) {
+                alert("Đăng ký tài khoản thành công. Vui lòng đăng nhập.");
                 navigate('/login');
-            } else {
-                const data = await response.json();
-                setError(data.message || "Có lỗi xảy ra.");
             }
         } catch (error) {
             console.error("Lỗi khi gửi yêu cầu:", error);
@@ -61,9 +53,9 @@ export const RegisterForm = () => {
                 <div className="mb-4">
                     <input
                         type="text"
-                        name="name"
-                        placeholder="Họ tên"
-                        value={formData.name}
+                        name="displayname"
+                        placeholder="Họ và tên"
+                        value={formData.displayname}
                         onChange={handleChange}
                         className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                         required
@@ -75,17 +67,6 @@ export const RegisterForm = () => {
                         name="phone"
                         placeholder="Số điện thoại"
                         value={formData.phone}
-                        onChange={handleChange}
-                        className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-                        required
-                    />
-                </div>
-                <div className="mb-4">
-                    <input
-                        type="email"
-                        name="email"
-                        placeholder="Email"
-                        value={formData.email}
                         onChange={handleChange}
                         className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                         required

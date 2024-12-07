@@ -1,16 +1,18 @@
-import React, { useState, useEffect }from 'react';
-import { Sidebar as ProSidebar, Menu, MenuItem, SubMenu, menuClasses } from 'react-pro-sidebar';
+import React, { useState, useEffect, useContext }from 'react';
+import { Sidebar as ProSidebar, Menu, MenuItem, SubMenu, menuClasses, SidebarProps } from 'react-pro-sidebar';
 import { IdCard, LayoutGrid, Users, Network, ChartColumnBig, Stethoscope, PillBottle, Settings, LogOut } from 'lucide-react';
 import { NavbarBrand } from 'react-bootstrap';
 import '../styles/Sidebar.css';
 import { SidebarHeader, Typography } from './Typography';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { Logo } from './Logo';
+import { useBreakpointSidebar, useToggleSidebar } from '../contexts/SidebarProvider';
+import api from '../api';
 
 const menuItems = [
   { icon: <LayoutGrid />, to: '/', label: 'Trang chủ' },
-  { icon: <IdCard />, to: '/patient', label: 'Bệnh nhân' },
-  { icon: <IdCard />, to: '/info', label: 'Thông tin' },
+  { icon: <IdCard />, to: '/patient-list', label: 'Bệnh nhân' },
+  { icon: <IdCard />, to: '/patient', label: 'Thông tin' },
   { icon: <Users />, to: '/queue', label: 'Hàng đợi' },
   { icon: <Network />, to: '/staff', label: 'Nhân viên' },
   { icon: <ChartColumnBig />, to: '/statistic', label: 'Thống kê' },
@@ -40,40 +42,21 @@ const StyledMenu = ({ children, collapsed, ...props }) => {
   );
 }
 
-const StyledMenuItem = ({ children, icon, to, ...props }) => {
-  const selectedColor = 'var(--primary-bg-color)';
-  return (
-    <NavLink to={to}
-      style={{
-        color: 'inherit',
-        textDecoration: 'none',
-      }}
-    >
-      {({isActive}) => (
-        <MenuItem icon={icon}
-          style={{
-            color: isActive ? selectedColor : 'inherit',
-          }}
-          component={<div className='flex-row gap-2.5 justify-center'></div>}
-          {...props}
-        >
-          {children}
-        </MenuItem>
-      )}
-    </NavLink>
-  );
-};
+const logoutColor = '#FE5620';
 
-export const Sidebar = () => {
+export const Sidebar = ({...props}: SidebarProps) => {
   const [collapsed, setCollapsed] = useState(false);
+  const { sidebarToggled, setSidebarToggled } = useToggleSidebar();
+  const navigate = useNavigate();
+  const {setSidebarBreakpoint} = useBreakpointSidebar();
 
   useEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth;
+      setCollapsed(false);
+      setSidebarBreakpoint(!(width > 576));
       if (width > 576 && width < 768) {
         setCollapsed(true);
-      } else if (width >= 768) {
-        setCollapsed(false);
       }
 
       return width;
@@ -85,15 +68,58 @@ export const Sidebar = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const logoutColor = '#FE5620';
+  const StyledMenuItem = ({ children, icon, to='', onClick=() => {}, ...props }) => {
+    const selectedColor = 'var(--primary-bg-color)';
+    return (
+      <NavLink to={to}
+        style={{
+          color: 'inherit',
+          textDecoration: 'none',
+        }}
+        onClick={() => {
+          if (onClick) {
+            onClick();
+          }
+          setSidebarToggled(false);
+        }}
+      >
+        {({isActive}) => (
+          <MenuItem icon={icon}
+            style={{
+              color: isActive ? selectedColor : 'inherit',
+            }}
+            component={<div className='flex-row gap-2.5 justify-center'></div>}
+            {...props}
+          >
+            {children}
+          </MenuItem>
+        )}
+      </NavLink>
+    );
+  };
+
+  const handleLogout = async () => {
+    try {
+      await api.post('/auth/logout/');
+      localStorage.removeItem('access_token');
+      navigate('/login');
+    } catch (error) {
+      console.error('Logout failed:', error);
+      alert('Không thể đăng xuất. Vui lòng thử lại.');
+    }
+  }
 
   return (
       <ProSidebar
+        backgroundColor='white'
         collapsed={collapsed}
         breakPoint="sm"
         width='210px'
         className='text-base font-medium relative inset-y-0 left-0'
         transitionDuration={0}
+        toggled={sidebarToggled}
+        onBackdropClick={() => setSidebarToggled(false)}
+        {...props}
       >
         <div className='relative gap-y-6 sidebar-container py-2.5 h-full'>
           <NavbarBrand href="/" className='justify-center place-items-center min-h-16 h-16' >
@@ -137,7 +163,8 @@ export const Sidebar = () => {
               KHÁC
             </Typography>
             <StyledMenuItem icon={<Settings />} to={'/setting'}>Cài đặt</StyledMenuItem>
-            <StyledMenuItem icon={<LogOut />} to={'/logout'}
+            <StyledMenuItem icon={<LogOut />}
+              onClick={handleLogout}
               style={{
                 color: logoutColor,
               }}

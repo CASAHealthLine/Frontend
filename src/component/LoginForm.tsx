@@ -3,6 +3,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import '../index.css'
 import { useNavigate } from 'react-router-dom';
+import api from '../api';
 export const LoginForm = () => {
 
   const navigate = useNavigate(); // Khởi tạo hook navigate
@@ -10,7 +11,15 @@ export const LoginForm = () => {
   // Hàm xử lý khi ấn "Hoàn thành"
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault(); // Ngăn chặn refresh trang
-    navigate('/'); // Điều hướng tới Home.jsx
+    api.post('/auth/login/', {
+      username: (e.target as any)[0].value,
+      password: (e.target as any)[1].value
+    }).then((res) => {
+      localStorage.setItem('access_token', res.data.access);
+      navigate('/');
+    }).catch((err) => {
+      console.log(err);
+    });
   };
 
   return (
