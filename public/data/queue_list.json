@@ -1,0 +1,37 @@
+[
+    {
+        "id": 1,
+        "name": "Nguyễn Văn A",
+        "room": "Phòng khám số 1",
+        "time": "09:00 AM",
+        "status": "Đợi"
+    },
+    {
+        "id": 2,
+        "name": "Trần Thị B",
+        "room": "Phòng khám số 2",
+        "time": "09:00 AM",
+        "status": "Đợi"
+    },
+    {
+        "id": 3,
+        "name": "Lê Minh C",
+        "room": "Phòng khám số 1",
+        "time": "09:00 AM",
+        "status": "Khám"
+    },
+    {
+        "id": 4,
+        "name": "Phạm Thanh D",
+        "room": "Phòng khám số 1",
+        "time": "09:00 AM",
+        "status": "Đợi"
+    },
+    {
+        "id": 5,
+        "name": "Hoàng Quốc E",
+        "room": "Phòng khám số 2",
+        "time": "09:00 AM",
+        "status": "Khám"
+    }
+]

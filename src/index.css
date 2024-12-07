@@ -9,7 +9,15 @@
 }
 
 html, body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.table-dark {
+  background-color: #24c38c !important;
+}
+
+tbody tr:hover {
+  background-color: #D9FEBA;
 }
