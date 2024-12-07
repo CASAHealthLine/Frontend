@@ -1,0 +1,37 @@
+[
+    {
+        "id": 1,
+        "name": "Nguyễn Văn A",
+        "gender": "Nam",
+        "birthday": "15/05/1990",
+        "test": "Siêu âm"
+    },
+    {
+        "id": 2,
+        "name": "Trần Thị B",
+        "gender": "Nữ",
+        "birthday": "15/05/1990",
+        "test": "Siêu âm"
+    },
+    {
+        "id": 3,
+        "name": "Lê Minh C",
+        "gender": "Nam",
+        "birthday": "15/05/1990",
+        "test": "Siêu âm"
+    },
+    {
+        "id": 4,
+        "name": "Phạm Thanh D",
+        "gender": "Nữ",
+        "birthday": "15/05/1990",
+        "test": "Siêu âm"
+    },
+    {
+        "id": 5,
+        "name": "Hoàng Quốc E",
+        "gender": "Nam",
+        "birthday": "15/05/1990",
+        "test": "Nội khoa"
+    }
+]

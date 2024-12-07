@@ -1,0 +1,10 @@
+[
+  {
+      "name": "Staff",
+      "number": 100
+  },
+  {
+      "name": "Patient",
+      "number": 300
+  }
+]

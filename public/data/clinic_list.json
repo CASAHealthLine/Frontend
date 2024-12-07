@@ -1,0 +1,37 @@
+[
+    {
+        "id": 1,
+        "room": "Phòng khám số 1",
+        "name": "Nguyễn Văn A",
+        "address": "201",
+        "people": "5"
+    },
+    {
+        "id": 2,
+        "room": "Phòng khám số 2",
+        "name": "Trần Thị B",
+        "address": "202",
+        "people": "4"
+    },
+    {
+        "id": 3,
+        "room": "Phòng khám số 3",
+        "name": "Lê Minh C",
+        "address": "203",
+        "people": "3"
+    },
+    {
+        "id": 4,
+        "room": "Phòng khám số 4",
+        "name": "Phạm Thanh D",
+        "address": "204",
+        "people": "2"
+    },
+    {
+        "id": 5,
+        "room": "Phòng khám số 5",
+        "name": "Hoàng Quốc E",
+        "address": "205",
+        "people": "7"
+    }
+]
