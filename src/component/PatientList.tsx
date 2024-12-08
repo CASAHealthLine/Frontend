@@ -5,30 +5,57 @@ type Patient = {
     name: string;
     gender: string;
     birthday: string;
-    cccd: number;
+    cccd: string;
 };
 
 export const PatientList = () => {
     const [patientData, setPatientData] = useState<Patient[]>([]);
+    const [searchTerm, setSearchTerm] = useState<string>(""); // Dữ liệu tìm kiếm
+    const [searchField, setSearchField] = useState<string>("name"); // Trường tìm kiếm (mặc định là họ tên)
+    const filteredData = patientData.filter((patient) => {
+        const value = patient[searchField as keyof Patient];
+        return value?.toString().toLowerCase().includes(searchTerm.toLowerCase());
+    });
 
     useEffect(() => {
         const fetchPatientData = async () => {
-          try {
-            const response = await fetch('/data/patient.json'); // Đường dẫn đến file JSON
-            const data = await response.json();
-            setPatientData(data); // Cập nhật state với dữ liệu JSON
-          } catch (error) {
-            console.error('Error loading Patient data:', error);
-          }
+            try {
+                const response = await fetch('/data/patient.json'); // Đường dẫn đến file JSON
+                const data = await response.json();
+                setPatientData(data); // Cập nhật state với dữ liệu JSON
+            } catch (error) {
+                console.error('Error loading Patient data:', error);
+            }
         };
-    
+
         fetchPatientData(); // Gọi hàm bất đồng bộ
-      }, []); // Chạy một lần khi component được mount
+    }, []); // Chạy một lần khi component được mount
 
     return (
         <div className="flex flex-col pt-[2.5%]">
-            <div>
+            <div className="flex justify-between items-center">
                 <h1 className="text-2xl font-bold mb-4 pl-[5.5%]">Danh sách bệnh nhân</h1>
+                <div className="flex items-center gap-2 pr-[5.5%]">
+                    {/* Dropdown chọn trường tìm kiếm */}
+                    <select
+                        className="border rounded px-2 py-1"
+                        value={searchField}
+                        onChange={(e) => setSearchField(e.target.value)}
+                    >
+                        <option value="id">ID</option>
+                        <option value="name">Họ tên</option>
+                        <option value="gender">Giới tính</option>
+                        <option value="birthday">Ngày sinh</option>
+                        <option value="cccd">CCCD</option>
+                    </select>
+                    {/* Ô nhập tìm kiếm */}
+                    <input
+                        type="text"
+                        className="border rounded px-2 py-1"
+                        placeholder={`Tìm kiếm theo ${searchField}`}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                </div>
             </div>
             <div className="flex justify-center w-full">
                 <table className="w-[90%]">
@@ -42,7 +69,7 @@ export const PatientList = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {patientData.map((patient) => (
+                        {filteredData.map((patient) => (
                             <tr key={patient.id}>
                                 <td className="px-4 py-2 text-center">{patient.id}</td>
                                 <td className="px-4 py-2 text-center">{patient.name}</td>
