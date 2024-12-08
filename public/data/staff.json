@@ -4,34 +4,64 @@
         "name": "Nguyễn Văn A",
         "gender": "Nam",
         "birthday": "15/05/1990",
-        "role": "Bác sĩ"
+        "specialty": "Nội khoa",
+        "email": "nguyenvana@example.com",
+        "phone": "0987654321",
+        "address": "123 Đường A, Phường B, Quận C, TP.HCM",
+        "employment_date": "01/01/2015",
+        "created_at": "15/12/2023",
+        "username": "doctor1"
     },
     {
         "id": 2,
         "name": "Trần Thị B",
         "gender": "Nữ",
-        "birthday": "15/05/1990",
-        "role": "Bác sĩ"
+        "birthday": "20/03/1988",
+        "specialty": "Nhi khoa",
+        "email": "tranthib@example.com",
+        "phone": "0978123456",
+        "address": "456 Đường X, Phường Y, Quận Z, Hà Nội",
+        "employment_date": "15/06/2012",
+        "created_at": "15/12/2023",
+        "username": "doctor2"
     },
     {
         "id": 3,
         "name": "Lê Minh C",
         "gender": "Nam",
-        "birthday": "15/05/1990",
-        "role": "Bác sĩ"
+        "birthday": "10/11/1985",
+        "specialty": "Phẫu thuật",
+        "email": "leminhc@example.com",
+        "phone": "0902345678",
+        "address": "789 Đường P, Phường Q, Quận R, Đà Nẵng",
+        "employment_date": "20/09/2010",
+        "created_at": "15/12/2023",
+        "username": "doctor3"
     },
     {
         "id": 4,
         "name": "Phạm Thanh D",
         "gender": "Nữ",
-        "birthday": "15/05/1990",
-        "role": "Lễ tân"
+        "birthday": "01/01/1992",
+        "specialty": "Lễ tân",
+        "email": "phamthanhd@example.com",
+        "phone": "0934567890",
+        "address": "321 Đường L, Phường M, Quận N, TP.HCM",
+        "employment_date": "01/03/2020",
+        "created_at": "15/12/2023",
+        "username": "doctor4"
     },
     {
         "id": 5,
         "name": "Hoàng Quốc E",
         "gender": "Nam",
-        "birthday": "15/05/1990",
-        "role": "Chuyên viên xét nghiệm"
+        "birthday": "25/07/1995",
+        "specialty": "Chuyên viên Xét nghiệm",
+        "email": "hoangquoce@example.com",
+        "phone": "0916783456",
+        "address": "654 Đường H, Phường I, Quận J, Cần Thơ",
+        "employment_date": "10/08/2021",
+        "created_at": "15/12/2023",
+        "username": "doctor5"
     }
 ]
