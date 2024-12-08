@@ -1,0 +1,26 @@
+[
+    {
+      "date": "02/10/2024",
+      "diagnosis": "Trào ngược dịch dạ dày nhẹ",
+      "summary": "Ợ nóng, ợ chua. Người bệnh sẽ ợ hơi thường xuyên để đẩy bớt lượng khí trong dạ dày ra ngoài, giảm khó chịu cho dạ dày, buồn nôn, nôn, đắng miệng.",
+      "testResults": ["1.pdf", "2.pdf"],
+      "diagnosisResults": ["1.pdf"],
+      "prescriptions": ["1.pdf"]
+    },
+    {
+      "date": "05/11/2024",
+      "diagnosis": "Trào ngược dịch dạ dày nặng",
+      "summary": "Ợ nóng, ợ chua. Người bệnh sẽ ợ hơi thường xuyên để đẩy bớt lượng khí trong dạ dày ra ngoài, giảm khó chịu cho dạ dày, buồn nôn, nôn, đắng miệng.",
+      "testResults": ["1.pdf"],
+      "diagnosisResults": ["1.pdf"],
+      "prescriptions": ["1.pdf"]
+    },{
+        "date": "05/12/2024",
+        "diagnosis": "Trào ngược dịch dạ dày nặng",
+        "summary": "Ợ nóng, ợ chua. Người bệnh sẽ ợ hơi thường xuyên để đẩy bớt lượng khí trong dạ dày ra ngoài, giảm khó chịu cho dạ dày, buồn nôn, nôn, đắng miệng.",
+        "testResults": ["1.pdf"],
+        "diagnosisResults": ["1.pdf"],
+        "prescriptions": ["1.pdf"]
+      }
+  ]
+  
