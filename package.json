@@ -10,8 +10,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@mui/material": "^6.1.9",
+    "@mui/x-charts": "^7.23.0",
     "@reduxjs/toolkit": "^2.3.0",
+    "axios": "^1.7.9",
     "bootstrap": "^5.3.3",
+    "js-cookie": "^3.0.5",
     "lucide-react": "^0.456.0",
     "react": "^18.3.1",
     "react-bootstrap": "^2.10.5",
@@ -34,7 +38,6 @@
     "postcss": "^8.4.47",
     "tailwindcss": "^3.4.14",
     "terser-brunch": "^4.1.0",
-    "typescript": "^5.6.3",
-    "vite": "^5.4.11"
+    "vite": "^5.4.10"
   }
 }

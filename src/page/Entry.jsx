@@ -27,15 +27,15 @@ export default function Entry() {
   };
 
   return (
-    <div>
+    <div className="">
       <Header />
-      <div className="flex flex-col md:flex-row items-center justify-between min-h-screen">
+      <div className="flex flex-col md:flex-row items-start justify-between min-h-screen pt-[2.5%]">
         {/* Banner bên trái */}
-        <div className="w-2/3 p-8">
+        <div className="w-2/3 mr-[2.5%]">
           <Banner />
         </div>
         {/* Form bên phải */}
-        <div className="w-1/3 p-8 rounded-lg border-2 border-black">
+        <div className="w-1/3 rounded-lg border-2 border-black mr-[2.5%]">
           <Tabs id="entry" activeKey={key} onSelect={handleTabSelect} className="nav-tabs nav-fill">
             <Tab eventKey="register" title="Đăng ký">
               <RegisterForm />

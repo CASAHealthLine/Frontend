@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PersonalInfo from "./PersonalInfo";
 import MedicalRecord from "./MedicalRecord";
 import { FaUserCircle } from "react-icons/fa";
@@ -6,17 +6,15 @@ import { MdCheckCircle } from "react-icons/md";
 
 const PatientInfo = () => {
   const [activeSection, setActiveSection] = useState("personalInfo");
+  const [patientInfo, setPatientInfo] = useState(null);
 
-  const patientInfo = {
-    name: "Nguyễn Văn A",
-    gender: "Nam",
-    dob: "01/03/2001",
-    address: "03 Trần Quốc Vượng, Dịch Vọng, Cầu Giấy, Hà Nội",
-    idNumber: "029182381821",
-    email: "vana@gmail.com",
-    phone: "0927318182",
-    occupation: "Tự Do",
-  };
+  useEffect(() => {
+    // Tải dữ liệu từ JSON
+    fetch("/persionalData.json")
+      .then((response) => response.json())
+      .then((data) => setPatientInfo(data))
+      .catch((error) => console.error("Error fetching patient info:", error));
+  }, []);
 
   const styles = {
     container: {
@@ -100,10 +98,12 @@ const PatientInfo = () => {
             <FaUserCircle />
           </div>
           <div style={styles.userInfo}>
-            <div style={styles.userName}>Nguyễn Văn B</div>
-            <div>ID: 22021101</div>
-            <div>Giới Tính: Nam</div>
-            <div>Ngày Sinh: 01/03/2001</div>
+            <div style={styles.userName}>
+              {patientInfo ? patientInfo.name : "Đang tải..."}
+            </div>
+            <div>ID: {patientInfo ? patientInfo.idNumber : "N/A"}</div>
+            <div>Giới Tính: {patientInfo ? patientInfo.gender : "N/A"}</div>
+            <div>Ngày Sinh: {patientInfo ? patientInfo.dob : "N/A"}</div>
           </div>
         </div>
         <div style={styles.verification}>
@@ -145,20 +145,13 @@ const PatientInfo = () => {
 
       {/* Content Section */}
       <div style={styles.content}>
-        {activeSection === "personalInfo" && (
-          <PersonalInfo
-            name={patientInfo.name}
-            gender={patientInfo.gender}
-            dob={patientInfo.dob}
-            address={patientInfo.address}
-            idNumber={patientInfo.idNumber}
-            email={patientInfo.email}
-            phone={patientInfo.phone}
-            occupation={patientInfo.occupation}
-          />
+        {activeSection === "personalInfo" && patientInfo && (
+          <PersonalInfo {...patientInfo} />
         )}
         {activeSection === "medicalRecord" && <MedicalRecord />}
-        {activeSection === "status" && <p>Trạng thái của bệnh nhân sẽ hiển thị tại đây.</p>}
+        {activeSection === "status" && (
+          <p>Trạng thái của bệnh nhân sẽ hiển thị tại đây.</p>
+        )}
       </div>
     </div>
   );

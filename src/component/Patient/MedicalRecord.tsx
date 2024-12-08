@@ -16,32 +16,15 @@ const MedicalRecord: React.FC = () => {
   const fetchMedicalRecords = async () => {
     setLoading(true);
     try {
-      const fakeData: Record[] = [
-        {
-          date: "02/10/2024",
-          diagnosis: "Trào ngược dịch dạ dày nhẹ",
-          summary:
-            "Ợ nóng, ợ chua. Người bệnh sẽ ợ hơi thường xuyên để đẩy bớt lượng khí trong dạ dày ra ngoài, giảm khó chịu cho dạ dày, buồn nôn, nôn, đắng miệng.",
-          testResults: ["1.pdf", "2.pdf"],
-          diagnosisResults: ["1.pdf"],
-          prescriptions: ["1.pdf"],
-        },
-        {
-          date: "05/11/2024",
-          diagnosis: "Trào ngược dịch dạ dày nặng",
-          summary:
-            "Ợ nóng, ợ chua. Người bệnh sẽ ợ hơi thường xuyên để đẩy bớt lượng khí trong dạ dày ra ngoài, giảm khó chịu cho dạ dày, buồn nôn, nôn, đắng miệng.",
-          testResults: ["1.pdf"],
-          diagnosisResults: ["1.pdf"],
-          prescriptions: ["1.pdf"],
-        },
-      ];
-      setTimeout(() => {
-        setRecords(fakeData);
-        setLoading(false);
-      }, 1000);
+      const response = await fetch('/data.json'); // Đường dẫn tới tệp JSON trong thư mục public
+      if (!response.ok) {
+        throw new Error("Failed to fetch data");
+      }
+      const data: Record[] = await response.json();
+      setRecords(data);
     } catch (error) {
       console.error("Failed to fetch medical records:", error);
+    } finally {
       setLoading(false);
     }
   };
@@ -57,11 +40,10 @@ const MedicalRecord: React.FC = () => {
         backgroundColor: "#fdfdfd",
         border: "1px solid #e0e0e0",
         borderRadius: "8px",
-        height: "500px", // Giới hạn chiều cao
-        overflowY: "auto", // Cho phép cuộn theo chiều dọc
+        height: "500px",
+        overflowY: "auto",
       }}
     >
-      
       {loading ? (
         <p>Đang tải dữ liệu...</p>
       ) : records.length > 0 ? (

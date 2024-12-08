@@ -20,7 +20,7 @@ const PatientHome: React.FC = () => {
       flex: 1,
       display: "flex",
       flexDirection: "column" as const,
-      gap: "60px",
+      gap:"40px"
     },
     header: {
       backgroundColor: "#23c38b",
@@ -28,18 +28,32 @@ const PatientHome: React.FC = () => {
       padding: "20px 30px",
       borderRadius: "10px",
       width: "100%",
-      marginTop: "20px",
-      textAlign: "center" as const,
+      textAlign: "left" as const,
       height: "182px",
       gap: "10px",
     },
     learnMore: {
-      backgroundColor: "white",
-      color: "#4caf50",
+      backgroundColor: "#171717",
+      color: "#FFFFFF",
       padding: "10px 20px",
       border: "none",
-      borderRadius: "5px",
+      borderRadius: "100px",
+      with: "125px",
+      height: "40",
       cursor: "pointer",
+    },
+    circle: {
+      display: "inline-flex",
+      justifyContent: "center",
+      alignItems: "center",
+      width: "20px",
+      height: "20px",
+      backgroundColor: "#fff",
+      color: "#000",
+      borderRadius: "50%", // Tạo hình tròn
+      fontSize: "12px",
+      fontWeight: "bold",
+      marginLeft: "10px", //
     },
     panel: {
       backgroundColor: "#f9f9f9",
@@ -87,11 +101,11 @@ const PatientHome: React.FC = () => {
         <div style={styles.column}>
           <div style={styles.header}>
             <h2>CASA HEALTHLINE</h2>
-            <p>
-              Hệ thống quản lý xếp hàng khám bệnh thông minh, quy trình và hỗ trợ
-              hiệu quả cho cả bệnh nhân và bác sĩ.
-            </p>
-            <button style={styles.learnMore}>Learn More</button>
+            <p>Hệ thống quản lý xếp hàng khám bệnh thông minh, tối ưu quy trình và hỗ trợ hiệu quả cho cả bệnh nhân và bác sĩ.
+            </p><button style={styles.learnMore}>
+              Learn More
+              <span style={styles.circle}>&gt;</span>
+            </button>
           </div>
 
           {/* Gọi component WaitingInfo */}
