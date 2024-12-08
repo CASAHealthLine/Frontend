@@ -1,24 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import '../index.css'
 import { useNavigate } from 'react-router-dom';
 import api from '../api';
 export const LoginForm = () => {
-
+  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate(); // Khởi tạo hook navigate
 
   // Hàm xử lý khi ấn "Hoàn thành"
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault(); // Ngăn chặn refresh trang
     api.post('/auth/login/', {
       username: (e.target as any)[0].value,
       password: (e.target as any)[1].value
     }).then((res) => {
       localStorage.setItem('access_token', res.data.access);
-      navigate('/');
+      navigate('/'); // Chuyển hướng về trang chính
     }).catch((err) => {
-      console.log(err);
+      setError('Số điện thoại hoặc mật khẩu không đúng');
     });
   };
 
@@ -41,6 +41,7 @@ export const LoginForm = () => {
               required
             />
           </div>
+          {error && <p className="text-center text-red-500">{error}</p>}
           <div className="text-center">
             <Button className="btn btn-custom" type="submit">Hoàn thành</Button>
           </div>

@@ -1,5 +1,4 @@
 import axios from 'axios';
-import Cookies from 'js-cookie';
 
 // Tạo một instance của Axios
 const api = axios.create({
