@@ -5,40 +5,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import '../index.css'
 import api from '../api';
 import OtpVerificationModal, { validate_vietnam_phone } from './OtpVerificationModal';
-
-// All interface of input field
-interface FocusInputProps {
-    value: string;
-    maxLength?: number;
-    children?: React.ReactNode;
-    [key: string]: any;
-}
-
-const FocusInput = ({ value, maxLength, children, ...props }: FocusInputProps) => {
-    const [isFocused, setIsFocused] = useState(false);
-
-    return (
-        <div
-            className={`px-3 mb-4 border rounded-lg ${
-                isFocused ? "ring-2 ring-green-500 border-green-500" : ""
-            } flex-row flex items-center gap-2`}
-        >
-            <input
-                onFocus={() => setIsFocused(true)}
-                onBlur={() => setIsFocused(false)}
-                className="grow py-2 border-none focus:outline-none"
-                maxLength={maxLength}
-                {...props}
-            />
-            {children}
-            {value && maxLength && (
-                <p className="text-sm text-gray-400 select-none m-0">
-                    {value.length}/{maxLength}
-                </p>
-            )}
-        </div>
-    );
-};
+import FocusInput from './FocusRingInput';
+import { IconButton } from '@mui/material';
+import { EyeIcon, EyeOffIcon } from 'lucide-react';
 
 export const RegisterForm = () => {
     const navigate = useNavigate();
@@ -51,6 +20,7 @@ export const RegisterForm = () => {
     const [error, setError] = useState<string | null>(null);
     const [numberVerify, setNumberVerify] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
+    const [togglePassword, setTogglePassword] = useState(false);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -100,22 +70,18 @@ export const RegisterForm = () => {
         }
     };
 
-    useEffect(() => {
-        console.log("OTP Verification Modal is visible:", modalVisible);
-    }, [modalVisible]);
-
     return (
         <>
             <div className="rounded-lg p-6 bg-white max-md:ml-0 max-md:w-full">
                 <Form onSubmit={handleSubmit}>
                     {/* Các trường nhập liệu của form đăng ký */}
-                    <FocusInput 
+                    <FocusInput
                         type='text' 
                         name='displayname' 
                         placeholder='Họ và tên' 
                         value={formData.displayname} 
                         onChange={handleChange} 
-                        required maxLength={100} />
+                        required maxLength={50} />
                     <FocusInput 
                         type='tel' 
                         name='phone' 
@@ -132,15 +98,19 @@ export const RegisterForm = () => {
                         {numberVerify && (<p className="select-none text-green-500 m-0">Đã xác thực</p>)}
                     </FocusInput>
                     <FocusInput
-                        type='password'
+                        type={togglePassword ? 'text' : 'password'}
                         name='password'
                         placeholder='Mật khẩu'
                         value={formData.password}
                         onChange={handleChange}
                         required
-                    />
+                    >
+                        <IconButton onClick={() => setTogglePassword(!togglePassword)}>
+                            {togglePassword ? <EyeIcon size={24} color="#24C38C" /> : <EyeOffIcon size={24} color="#24C38C" />}
+                        </IconButton>
+                    </FocusInput>
                     <FocusInput
-                        type='password'
+                        type={togglePassword ? 'text' : 'password'}
                         name='confirmPassword'
                         placeholder='Xác nhận mật khẩu'
                         value={formData.confirmPassword}
@@ -153,15 +123,14 @@ export const RegisterForm = () => {
                     </div>
                 </Form>
             </div>
-            <OtpVerificationModal
+            {modalVisible && <OtpVerificationModal
                 isVisible={modalVisible}
                 onRequestClose={() => setModalVisible(false)}
-                onVerify={() => {
-                    setNumberVerify(true);
-                    setModalVisible(false);
-                }}
-                phone={formData.phone}
-            />
+                onVerify={() => setNumberVerify(true)}
+                phoneNumber={formData.phone}
+                onlyVerify
+                autoRequest
+            />}
         </>
     );
 }
