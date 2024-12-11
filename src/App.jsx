@@ -3,7 +3,7 @@ import { Sidebar } from './component/Sidebar';
 import { Topbar } from './component/Topbar';
 import { SidebarProvider } from './contexts/SidebarProvider';
 import { useAuthValidation } from './hooks/useAuthValidation';
-import { TestList } from './component/TestList';
+import { PatientList } from './component/PatientList';
 function App() {
   useAuthValidation();
 
@@ -15,6 +15,7 @@ function App() {
           <Topbar />
           <Routes>
           </Routes>
+          <PatientList/>
         </div>
         
       </div>
