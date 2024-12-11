@@ -56,32 +56,64 @@ export const AddPatientModal: React.FC<AddPatientModalProps> = ({ show, onClose 
     const handleAddPatient = () => {
         const newId = patientData.length > 0 ? Math.max(...patientData.map(s => s.id)) + 1 : 1;
         const addedPatient = { ...newPatient, id: newId } as Patient;
-    
+
         setPatientData([...patientData, addedPatient]);
     };
-    
+
+    const handleSubmit = (e) => {
+        // Sử dụng hành vi mặc định, trình duyệt sẽ kiểm tra các trường `required`
+        e.preventDefault();
+    };
+
 
     const handleNextStep = () => setStep(step + 1);
     const handlePrevStep = () => setStep(step - 1);
 
-    const getTitle = () => {
-        if (step === 1) return `Thêm thông tin Bệnh Nhân - Bước ${step}`;
-        if (step === 2) return `Mô tả tình trạng Bệnh Nhân - Bước ${step}`;
-        return `Bước ${step}`;
-    };
-
     return (
         <Modal show={show} onHide={onClose} centered>
             <Modal.Header closeButton>
-                <Modal.Title>{getTitle()}</Modal.Title>
+                <Modal.Title>
+                    <div className="flex items-center space-x-4 items-center">
+                        {/* Bước 1 */}
+                        <div className="flex items-center space-x-2">
+                            <div
+                                className={`w-8 h-8 flex items-center justify-center rounded-full ${step > 1 ? "bg-green-500 text-white" : "bg-blue-500 text-white"
+                                    }`}
+                            >
+                                {step > 1 ? "✔" : "1"}
+                            </div>
+                            <span
+                                className={`text-sm ${step >= 1 ? "text-black font-medium" : "text-gray-500"
+                                    }`}
+                            >
+                                Hồ sơ
+                            </span>
+                        </div>
+
+                        {/* Divider */}
+                        <div className="w-8 h-1 bg-gray-300"></div>
+
+                        {/* Bước 2 */}
+                        <div className="flex items-center space-x-2">
+                            <div
+                                className={`w-8 h-8 flex items-center justify-center rounded-full ${step === 2 ? "bg-blue-500 text-white" : "bg-gray-300 text-gray-700"
+                                    }`}
+                            >
+                                2
+                            </div>
+                            <span
+                                className={`text-sm ${step === 2 ? "text-black font-medium" : "text-gray-500"
+                                    }`}
+                            >
+                                Mô tả
+                            </span>
+                        </div>
+                    </div>
+                </Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 {step === 1 && (
-                    <form
-                    onSubmit={(e) => {
-                        e.preventDefault();
-                    }}
-                    >
+                    <form onSubmit={handleSubmit}>
                         <div className="flex items-center gap-4">
                             <label className="font-semibold w-32 text-left">Họ tên:</label>
                             <input
@@ -173,10 +205,10 @@ export const AddPatientModal: React.FC<AddPatientModalProps> = ({ show, onClose 
                 )}
                 {step === 2 && (
                     <form
-                    onSubmit={(e) => {
-                        e.preventDefault();
-                        handleAddPatient();
-                    }}
+                        onSubmit={(e) => {
+                            e.preventDefault();
+                            handleAddPatient();
+                        }}
                     >
                         <div className="form-group">
                             <label className="block font-semibold w-32">Mô tả</label>
