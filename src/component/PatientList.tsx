@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Plus } from 'lucide-react';
 import { AddPatientModal } from './AddPatientModal';
 import '../index.css';
+
 type Patient = {
     id: number;
     name: string;
@@ -22,6 +23,7 @@ export const PatientList = () => {
     const [searchTerm, setSearchTerm] = useState<string>(""); // Dữ liệu tìm kiếm
     const [searchField, setSearchField] = useState<string>("name"); // Trường tìm kiếm (mặc định là họ tên)
     const [showModal, setShowModal] = useState(false);
+
     const filteredData = patientData.filter((patient) => {
         const value = patient[searchField as keyof Patient];
         return value?.toString().toLowerCase().includes(searchTerm.toLowerCase());
@@ -46,10 +48,13 @@ export const PatientList = () => {
             <div className="flex justify-between items-center">
                 <h1 className="text-2xl font-bold mb-4 pl-[5.5%]">Danh sách bệnh nhân</h1>
                 <div className="flex items-center gap-2 pr-[5.5%]">
-                <Plus className="cursor-pointer" onClick={() => setShowModal(true)} />
-                <AddPatientModal show={showModal} onClose={() => setShowModal(false)} onSave={function (patient: { id: number; name: string; gender: string; birthday: string; address: string; bhyt: string; cccd: string; job: string; phone: string; account_id: number; created_at: string; email: string; description: string; }): void {
-                        throw new Error('Function not implemented.');
-                    } } />
+                    <Plus className="cursor-pointer" onClick={() => setShowModal(true)} />
+                    <AddPatientModal
+                        show={showModal}
+                        onClose={() => setShowModal(false)}
+                        patientData={patientData} // Truyền danh sách bệnh nhân hiện tại
+                        onSave={(newPatient) => setPatientData([...patientData, newPatient])} // Cập nhật danh sách
+                    />
                     {/* Dropdown chọn trường tìm kiếm */}
                     <select
                         className="border rounded px-2 py-1"
