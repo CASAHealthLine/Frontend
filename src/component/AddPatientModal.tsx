@@ -116,7 +116,11 @@ export const AddPatientModal: React.FC<AddPatientModalProps> = ({ show, onClose,
                 </Modal.Header>
                 <Modal.Body>
                     {step === 1 && (
-                        <form>
+                        <form id="add-patient-form"
+                            onSubmit={(e) => {
+                                e.preventDefault();
+                            }}
+                        >
                             <div className="flex items-center gap-4">
                                 <label className="font-semibold w-32 text-left">Họ tên:</label>
                                 <input
@@ -233,7 +237,17 @@ export const AddPatientModal: React.FC<AddPatientModalProps> = ({ show, onClose,
                         </Button>
                     )}
                     {step < 2 ? (
-                        <Button className="btn btn-custom" type="submit" onClick={handleNextStep}>
+                        <Button
+                            className="btn btn-custom"
+                            onClick={(e) => {
+                                const form = document.getElementById('add-patient-form') as HTMLFormElement;
+                                if (form.checkValidity()) {
+                                    handleNextStep();
+                                } else {
+                                    form.reportValidity();
+                                }
+                            }}
+                        >
                             Tiếp
                         </Button>
                     ) : (
