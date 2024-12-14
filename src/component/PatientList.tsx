@@ -37,19 +37,16 @@ export const PatientList = () => {
     fetchPatientData();
   }, []);
 
-  const columns = [
-    { column: 'id', displayColumn: 'ID' },
-    { column: 'name', displayColumn: 'Họ tên' },
-    { column: 'gender', displayColumn: 'Giới tính' },
-    { column: 'birthday', displayColumn: 'Ngày sinh' },
-    { column: 'cccd', displayColumn: 'CCCD' },
-  ];
+const columns = ["id", "name", "gender", "cccd", "birthday"]; // Các tên cột thực tế
+const displayColumns = ["ID", "Họ tên", "Giới tính", "CCCD", "Ngày sinh"]; // Tên hiển thị
+
 
   return (
     <div className="flex flex-col pt-[2.5%]">
       <List
         title="Danh sách bệnh nhân"
-        columns={columns}
+        columns={columns} // Truyền mảng tên cột thực tế
+        displayColumns={displayColumns} // Truyền mảng tên hiển thị
         data={patientData}
         filters={['name', 'gender', 'cccd']}
         showPlusButton

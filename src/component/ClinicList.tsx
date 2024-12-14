@@ -27,18 +27,15 @@ export const ClinicList = () => {
     fetchClinicData(); // Gọi hàm bất đồng bộ
   }, []); // Chạy một lần khi component mount
 
-  const columns = [
-    { column: 'id', displayColumn: 'ID' },
-    { column: 'room', displayColumn: 'Tên phòng' },
-    { column: 'name', displayColumn: 'Người phụ trách' },
-    { column: 'address', displayColumn: 'Địa chỉ phòng khám' },
-    { column: 'people', displayColumn: 'Người đợi' },
-  ];
+  const columns = ['id', 'room', 'name', 'address', 'people'];
+  const displayColumns = ['ID', 'Tên phòng', 'Người phụ trách', 'Địa chỉ phòng khám', 'Người đợi'];
+  
 
   return (
     <List
       title="Danh sách phòng khám"
-      columns={columns}
+      columns={columns} // Truyền mảng tên cột thực tế
+      displayColumns={displayColumns} // Truyền mảng tên hiển thị
       data={clinicData}
       filters={['name', 'room', 'address']}
     />

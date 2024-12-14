@@ -27,18 +27,15 @@ export const QueueList = () => {
     fetchQueueData(); // Gọi hàm bất đồng bộ
   }, []); // Chạy một lần khi component mount
 
-  const columns = [
-    { column: 'id', displayColumn: 'Mã y lệnh' },
-    { column: 'name', displayColumn: 'Họ tên' },
-    { column: 'room', displayColumn: 'Phòng' },
-    { column: 'time', displayColumn: 'Thời gian' },
-    { column: 'status', displayColumn: 'Trạng thái' },
-  ];
+  const columns = ['id', 'name', 'room', 'time', 'status']; // Các tên cột thực tế
+  const displayColumns = ['Mã y lệnh', 'Họ tên', 'Phòng', 'Thời gian', 'Trạng thái']; // Tên hiển thị tương ứng
+  
 
   return (
     <List
       title="Danh sách hàng đợi"
-      columns={columns}
+      columns={columns} // Truyền mảng tên cột thực tế
+      displayColumns={displayColumns} // Truyền mảng tên hiển thị
       data={queueData}
       filters={['name', 'room', 'status']}
     />

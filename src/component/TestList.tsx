@@ -26,19 +26,15 @@ export const TestList = () => {
 
     fetchTestData(); // Gọi hàm bất đồng bộ
   }, []); // Chạy một lần khi component mount
-
-  const columns = [
-    { column: 'id', displayColumn: 'ID' },
-    { column: 'name', displayColumn: 'Họ tên' },
-    { column: 'gender', displayColumn: 'Giới tính' },
-    { column: 'birthday', displayColumn: 'Ngày sinh' },
-    { column: 'test', displayColumn: 'Xét nghiệm' },
-  ];
+  const columns = ['id', 'name', 'gender', 'birthday', 'test']; // Các tên cột thực tế
+  const displayColumns = ['ID', 'Họ tên', 'Giới tính', 'Giới tính', 'Xét nghiệm']; // Tên hiển thị tương ứng
+  
 
   return (
     <List
       title="Danh sách xét nghiệm"
-      columns={columns}
+      columns={columns} // Truyền mảng tên cột thực tế
+      displayColumns={displayColumns} // Truyền mảng tên hiển thị
       data={testData}
       filters={['name', 'gender', 'birthday', 'test']}
     />

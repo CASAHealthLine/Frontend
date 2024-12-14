@@ -90,16 +90,11 @@ export const StaffList = () => {
     };
 
     return (
-<div className="flex flex-col pt-[2.5%]">
+        <div className="flex flex-col pt-[2.5%]">
             <List
                 title="Danh sách nhân viên"
-                columns={[
-                    { column: "id", displayColumn: "ID" },
-                    { column: "name", displayColumn: "Họ tên" },
-                    { column: "gender", displayColumn: "Giới tính" },
-                    { column: "birthday", displayColumn: "Ngày sinh" },
-                    { column: "specialty", displayColumn: "Chuyên ngành" }
-                ]}
+                columns={["id", "name", "gender", "birthday", "specialty"]}
+                displayColumns={["ID", "Họ tên", "Giới tính", "Ngày sinh", "Chuyên ngành"]}
                 data={staffData}
                 filters={["id", "name", "gender", "birthday", "specialty"]}
                 showPlusButton
@@ -111,7 +106,7 @@ export const StaffList = () => {
                 onRowSelect={handleRowSelect}
                 onRowClick={handleRowClick}
             />
-                        {selectedStaff && (
+            {selectedStaff && (
                 <Modal
                     isOpen={isModalOpen}
                     onRequestClose={() => setIsModalOpen(false)}
@@ -291,7 +286,7 @@ export const StaffList = () => {
                     </div>
                 </Modal>
             )}
-            </div>
-            
+        </div>
+
     );
 };

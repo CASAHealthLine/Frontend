@@ -4,14 +4,10 @@ import '../index.css';
 import { useSearchParams } from 'react-router-dom';
 import { Plus, Trash2 } from 'lucide-react';
 
-type ColumnConfig = {
-    column: string;
-    displayColumn?: string;
-};
-
 type ListProps<T> = {
     title: string;
-    columns: ColumnConfig[];
+    columns: string[]; // Array of column identifiers
+    displayColumns?: string[]; // Optional array of display names corresponding to columns
     data: T[];
     filters?: string[];
     showPlusButton?: boolean; // Toggle for Plus button
@@ -27,6 +23,7 @@ type ListProps<T> = {
 export const List = <T extends Record<string, any>>({
     title,
     columns,
+    displayColumns = [],
     data,
     filters = [],
     showPlusButton = false,
@@ -40,7 +37,7 @@ export const List = <T extends Record<string, any>>({
 }: ListProps<T>) => {
     const [searchParams, setSearchParams] = useSearchParams();
     const [searchTerm, setSearchTerm] = useState<string>('');
-    const [searchField, setSearchField] = useState<string>(filters[0] || columns[0].column);
+    const [searchField, setSearchField] = useState<string>(filters[0] || columns[0]);
 
     useEffect(() => {
         const paramField = searchParams.get('field');
@@ -84,7 +81,9 @@ export const List = <T extends Record<string, any>>({
                         >
                             {filters.map((filter) => (
                                 <option key={filter} value={filter}>
-                                    {columns.find((col) => col.column === filter)?.displayColumn || filter}
+                                    {columns.includes(filter) 
+                                        ? displayColumns[columns.indexOf(filter)] || filter
+                                        : filter}
                                 </option>
                             ))}
                         </select>
@@ -109,12 +108,12 @@ export const List = <T extends Record<string, any>>({
                                     style={{ height: "auto" }} // Đảm bảo chiều cao tự động khớp
                                 ></th>
                             )}
-                            {columns.map((col) => (
+                            {columns.map((col, index) => (
                                 <th
-                                    key={col.column}
+                                    key={col}
                                     className="px-4 py-2 border-white border-8 text-center align-middle"
                                 >
-                                    {col.displayColumn || col.column}
+                                    {displayColumns[index] || col}
                                 </th>
                             ))}
                         </tr>
@@ -139,8 +138,8 @@ export const List = <T extends Record<string, any>>({
                                     </td>
                                 )}
                                 {columns.map((col) => (
-                                    <td key={col.column} className="px-4 py-2 text-center">
-                                        {item[col.column]}
+                                    <td key={col} className="px-4 py-2 text-center">
+                                        {item[col]}
                                     </td>
                                 ))}
                             </tr>
