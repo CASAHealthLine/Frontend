@@ -2,22 +2,33 @@ import React, { useEffect, useState } from 'react';
 import '../index.css';
 import { Plus, SearchIcon, SlidersHorizontalIcon, Trash2 } from 'lucide-react';
 import api from '../api';
-import { Box, Drawer } from '@mui/material';
+import { Box, Drawer, FormControlLabel, Checkbox } from '@mui/material';
 
 type ApiListProps<T> = {
     title: string;
-    columns: string[]; // Array of column identifiers
-    displayColumns?: string[]; // Optional array of display names corresponding to columns
-    filters?: T[]
-    showPlusButton?: boolean; // Toggle for Plus button
-    onPlusClick?: () => void; // Callback for Plus button
-    showTrashButton?: boolean; // Toggle for Trash button
-    onTrashClick?: () => void; // Callback for Trash button
-    enableRowSelection?: boolean; // Enable row selection with checkboxes
-    selectedRows?: number[]; // Array of selected row IDs
-    onRowSelect?: (id: number) => void; // Callback for row selection
+    columns: string[];
+    displayColumns?: string[];
+    filters?: T[];
+    showPlusButton?: boolean;
+    onPlusClick?: () => void;
+    showTrashButton?: boolean;
+    onTrashClick?: () => void;
+    enableRowSelection?: boolean;
+    selectedRows?: number[];
+    onRowSelect?: (id: number) => void;
     onRowClick?: (item: T) => void;
-    apiEndpoint: string; // API endpoint for fetching data
+    apiEndpoint: string;
+};
+
+type FilterOption = {
+    label: string;
+    value: string;
+};
+
+type Filter = {
+    field: string;
+    label: string;
+    options: FilterOption[];
 };
 
 const useDebounce = (value, delay) => {
@@ -48,15 +59,16 @@ export const ApiList = <T extends Record<string, any>>({
     const [filterDrawerOpen, setFilterDrawerOpen] = useState(false);
     const [searchParams, setSearchParams] = useState<{ [key: string]: string }>({});
     const [data, setData] = useState<T[]>([]);
+    const [filters, setFilters] = useState<Filter[]>([]);
     const debouncedFilters = useDebounce(searchParams, 500);
 
+    // Fetch API data
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const response = await api.get(apiEndpoint);
                 const data = response.data;
                 setData(data);
-                console.log(data);
             } catch (error) {
                 console.error('Error loading data:', error);
             }
@@ -65,6 +77,7 @@ export const ApiList = <T extends Record<string, any>>({
         fetchData();
     }, []);
 
+    // Fetch filtered API data
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -79,13 +92,52 @@ export const ApiList = <T extends Record<string, any>>({
         fetchData();
     }, [debouncedFilters]);
 
+    // Fetch filter data
+    useEffect(() => {
+        const fetchFilters = async () => {
+            try {
+                const response = await api.get('/data/queue_filters.json');
+                setFilters(response.data);
+                console.log('Filters loaded:', filters);
+            } catch (error) {
+                console.error('Error fetching filters:', error);
+            }
+        };
+
+        fetchFilters();
+    }, []);
+
     const toggleDrawer = (newOpen: boolean) => () => {
         setFilterDrawerOpen(newOpen);
     };
 
+    const handleFilterChange = (field: string, value: string) => {
+        setSearchParams((prev) => ({
+            ...prev,
+            [field]: value,
+        }));
+    };
+
     const DrawnerList = (
-        <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
-        </Box>
+        <Box sx={{ width: 250 }} role="presentation">
+        <h1 className="text-center font-bold">Bộ lọc</h1>
+        {filters.map((filter) => (
+            <div key={filter.field} className="mb-4">
+                <h3 className="font-semibold">{filter.label}</h3>
+                {filter.options.map((option) => (
+                    <FormControlLabel
+                        key={option.value}
+                        control={
+                            <Checkbox
+                                onChange={() => handleFilterChange(filter.field, option.value)}
+                            />
+                        }
+                        label={`${option.label}`}
+                    />
+                ))}
+            </div>
+        ))}
+    </Box>
     );
 
     return (
@@ -106,7 +158,9 @@ export const ApiList = <T extends Record<string, any>>({
                             className="border-none focus:ring-0 focus:outline-none"
                             placeholder="Tìm kiếm..."
                             value={searchParams.search}
-                            onChange={(e) => setSearchParams({ search: e.target.value })}
+                            onChange={(e) =>
+                                setSearchParams((prev) => ({ ...prev, search: e.target.value }))
+                            }
                         />
                         <SlidersHorizontalIcon className="cursor-pointer" onClick={toggleDrawer(true)} />
                     </div>
@@ -118,10 +172,7 @@ export const ApiList = <T extends Record<string, any>>({
                     <thead className="table-dark">
                         <tr>
                             {enableRowSelection && (
-                                <th
-                                    className="px-4 py-2 border-white border-8 text-center align-middle"
-                                    style={{ height: "auto" }} // Đảm bảo chiều cao tự động khớp
-                                ></th>
+                                <th className="px-4 py-2 border-white border-8 text-center align-middle"></th>
                             )}
                             {columns.map((col, index) => (
                                 <th
@@ -133,13 +184,12 @@ export const ApiList = <T extends Record<string, any>>({
                             ))}
                         </tr>
                     </thead>
-
                     <tbody>
                         {data?.results?.map((item, index) => (
                             <tr
                                 key={index}
-                                onClick={() => onRowClick?.(item)} // Gọi hàm onRowClick nếu được cung cấp
-                                style={{ cursor: "pointer" }}
+                                onClick={() => onRowClick?.(item)}
+                                style={{ cursor: 'pointer' }}
                             >
                                 {enableRowSelection && (
                                     <td className="flex justify-center items-center">
@@ -148,7 +198,7 @@ export const ApiList = <T extends Record<string, any>>({
                                             className="w-6 h-6 border-2 border-gray-500 rounded"
                                             checked={selectedRows.includes(item.id)}
                                             onChange={() => onRowSelect?.(item.id)}
-                                            onClick={(e) => e.stopPropagation()} // Ngăn chặn sự kiện click hàng
+                                            onClick={(e) => e.stopPropagation()}
                                         />
                                     </td>
                                 )}
@@ -162,7 +212,7 @@ export const ApiList = <T extends Record<string, any>>({
                     </tbody>
                 </table>
             </div>
-            <Drawer open={filterDrawerOpen} onClose={toggleDrawer(false)} anchor='right'>
+            <Drawer open={filterDrawerOpen} onClose={toggleDrawer(false)} anchor="right">
                 {DrawnerList}
             </Drawer>
         </div>
