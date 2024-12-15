@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Modal from 'react-bootstrap/Modal';
 import api from "../api";
+import { TabContainer, TabContent, TabPane } from "react-bootstrap";
+import FocusRingInput from "./FocusRingInput";
+import { IconButton } from "@mui/material";
+import { ArrowLeftIcon, XIcon } from "lucide-react";
 
 const InputBoxes = ({ length = 6, onChange }) => {
     const [values, setValues] = useState(Array(length).fill(''));
@@ -93,11 +97,33 @@ const InputBoxes = ({ length = 6, onChange }) => {
     );
 };
 
-const OtpVerificationModal = ({ isVisible, phone, onRequestClose, onVerify }) => {
+interface OtpVerificationModalProps {
+    isVisible: boolean;
+    phoneNumber?: string;
+    onRequestClose: () => void;
+    onVerify: (otp?: string, phone?: string) => void;
+    onlyVerify?: boolean;
+    autoRequest?: boolean;
+}
+
+const OtpVerificationModal = ({ isVisible, phoneNumber='', onRequestClose, onVerify, onlyVerify = false, autoRequest = false }: OtpVerificationModalProps) => {
     const [otp, setOtp] = useState("");
-    const censorPhone = phone.substring(0, 2) + '*****' + phone.substring(8, 10);
+    const [phone, setPhone] = useState<string>(phoneNumber);
+    const [censorPhone, setCensorPhone] = useState<string | null>(null);
     const [cooldown, setCooldown] = useState(0);
     const [error, setError] = useState<string | null>(null);
+    const [tab, setTab] = useState(1);
+
+    useEffect(() => {
+        setTab(1);
+        setCensorPhone(phone ? phone.substring(0, 2) + '****' + phone.substring(8) : null);
+    }, [phone]);
+
+    useEffect(() => {
+        if (onlyVerify) {
+            setTab(2);
+        }
+    }, [onlyVerify, tab]);
 
     useEffect(() => {
         if (cooldown > 0) {
@@ -112,13 +138,6 @@ const OtpVerificationModal = ({ isVisible, phone, onRequestClose, onVerify }) =>
     const sendOtp = () => {
         api.post('/auth/request-otp/', { phone: phone });
     };
-    
-    useEffect(() => {
-        if (isVisible) {
-            sendOtp();
-        }
-        setError(null);
-    }, [isVisible]);
 
     const handleVerify = () => {
         if (otp.length < 4) {
@@ -129,7 +148,8 @@ const OtpVerificationModal = ({ isVisible, phone, onRequestClose, onVerify }) =>
             phone: phone,
             otp: otp
         }).then(() => {
-            onVerify();
+            onVerify(otp, phone);
+            onRequestClose();
         }).catch((e) => {
             switch (e.response.status) {
                 case 400:
@@ -148,6 +168,15 @@ const OtpVerificationModal = ({ isVisible, phone, onRequestClose, onVerify }) =>
         });
     };
 
+    const handleNext = () => {
+        if (validate_vietnam_phone(phone)) {
+            setError(null);
+            setTab(2);
+        } else {
+            setError("Số điện thoại không hợp lệ");
+        }
+    };
+
     const handleResend = () => {
         if (cooldown === 0) {
             setCooldown(60);
@@ -163,27 +192,69 @@ const OtpVerificationModal = ({ isVisible, phone, onRequestClose, onVerify }) =>
             onHide={onRequestClose}
             centered
         >
-            <Modal.Header closeButton className="border-0" />
+            <Modal.Header className="border-0 flex flex-row pt-2 pb-0">
+                {!onlyVerify && tab === 2 && (
+                    <IconButton onClick={() => setTab(1)}>
+                        <ArrowLeftIcon size={28} />
+                    </IconButton>
+                )}
+                <IconButton onClick={onRequestClose} style={{marginLeft: 'auto'}}>
+                    <XIcon size={28} />
+                </IconButton>
+            </Modal.Header>
             <Modal.Body className="align-center text-center flex flex-col">
-                <h3 className="">Nhập mã OTP</h3>
-                <p className="">Nhập mã OTP đã được gửi đến số {censorPhone}</p>
-                <div className="flex justify-center">
-                    <InputBoxes length={4} onChange={setOtp} />
-                </div>
-                <p className="text-center m-0">Chưa nhận được mã?</p>
-                <button className="text-center text-green-500" onClick={handleResend} disabled={cooldown > 0}
-                    style={{opacity: cooldown > 0 ? 0.5 : 1}}
-                >
-                    Gửi lại {cooldown > 0 && `(${cooldown}s)`}
-                </button>
-                {error && <p className="text-center text-red-500">{error}</p>}
-                <button className="btn btn-custom mt-4 w-2/3 h-12 self-center"
-                    style={{ backgroundColor: '#24C38C', color: 'white', fontWeight: 'bold', fontSize: '1.2rem' }}
-                    onClick={handleVerify}
-                    disabled={otp.length < 4}
-                >
-                        Xác thực
-                </button>
+                <TabContainer activeKey={tab} mountOnEnter unmountOnExit>
+                    <TabContent>
+                        <TabPane eventKey={1}>
+                            <div className="align-center flex flex-col">
+                                <h3 className="">Nhập số điện thoại</h3>
+                                <p className="">Nhập số điện thoại để nhận mã OTP</p>
+                                <FocusRingInput
+                                    type='tel'
+                                    name='phone'
+                                    placeholder='Số điện thoại'
+                                    value={phone}
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                        setPhone(e.target.value);
+                                        setError(null);
+                                    }}
+                                    required maxLength={10} minLength={10}
+                                    containerStyle={{ margin: '0 4em' }}
+                                />
+                                {error && <p className="text-center text-red-500">{error}</p>}
+                                <button className="btn btn-custom mt-4 w-2/3 h-12 self-center"
+                                    style={{ backgroundColor: '#24C38C', color: 'white', fontWeight: 'bold', fontSize: '1.2rem' }}
+                                    onClick={handleNext}
+                                >
+                                    Tiếp theo
+                                </button>
+                            </div>
+                        </TabPane>
+                        <TabPane eventKey={2} onEntered={autoRequest ? sendOtp : undefined}>
+                            <div className="align-center text-center flex flex-col">
+                                <h3 className="">Nhập mã OTP</h3>
+                                {censorPhone && <p className="">Nhập mã OTP đã được gửi đến số {censorPhone}</p>}
+                                <div className="flex justify-center">
+                                    <InputBoxes length={4} onChange={setOtp} />
+                                </div>
+                                <p className="text-center m-0">Chưa nhận được mã?</p>
+                                <button className="text-center text-green-500" onClick={handleResend} disabled={cooldown > 0}
+                                    style={{opacity: cooldown > 0 ? 0.5 : 1}}
+                                >
+                                    Gửi lại {cooldown > 0 && `(${cooldown}s)`}
+                                </button>
+                                {error && <p className="text-center text-red-500">{error}</p>}
+                                <button className="btn btn-custom mt-4 w-2/3 h-12 self-center"
+                                    style={{ backgroundColor: '#24C38C', color: 'white', fontWeight: 'bold', fontSize: '1.2rem' }}
+                                    onClick={handleVerify}
+                                    disabled={otp.length < 4}
+                                >
+                                    Xác thực
+                                </button>
+                            </div>
+                        </TabPane>
+                    </TabContent>
+                </TabContainer>
             </Modal.Body>
             <Modal.Footer className="border-0" />
         </Modal>
@@ -191,8 +262,10 @@ const OtpVerificationModal = ({ isVisible, phone, onRequestClose, onVerify }) =>
 };
 
 const validPrefix = ['03', '05', '07', '08', '09'];
-export const validate_vietnam_phone = (phone: string): boolean => {
+export const validate_vietnam_phone = (phone?: string): boolean => {
+    if (!phone) return false;
     if (phone.length !== 10) return false;
+    if (!/^\d+$/.test(phone)) return false;
     const prefix = phone.substring(0, 2);
     return validPrefix.includes(prefix);
 }
