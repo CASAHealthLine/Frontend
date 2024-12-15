@@ -3,7 +3,7 @@ import { Sidebar } from './component/Sidebar';
 import { Topbar } from './component/Topbar';
 import { SidebarProvider } from './contexts/SidebarProvider';
 import { useAuthValidation } from './hooks/useAuthValidation';
-import { PatientList } from './component/PatientList';
+import { QueueList } from './component/QueueList';
 function App() {
   useAuthValidation();
 
@@ -14,6 +14,7 @@ function App() {
         <div className='flex flex-col relative w-full'>
           <Topbar />
           <Routes>
+            <Route path='/' element={<QueueList />} />
           </Routes>
         </div>
         
