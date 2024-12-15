@@ -62,6 +62,7 @@ export const ApiList = <T extends Record<string, any>>({
     const [filters, setFilters] = useState<Filter[]>([]);
     const debouncedFilters = useDebounce(searchParams, 500);
 
+
     // Fetch API data
     useEffect(() => {
         const fetchData = async () => {
@@ -96,9 +97,16 @@ export const ApiList = <T extends Record<string, any>>({
     useEffect(() => {
         const fetchFilters = async () => {
             try {
-                const response = await api.get('/data/queue_filters.json');
-                setFilters(response.data);
-                console.log('Filters loaded:', filters);
+                const response = await fetch('/data/queue_filters.json');
+
+                // Kiểm tra xem response có thành công không
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json(); // Parse dữ liệu JSON
+                console.log('API response:', data);
+                setFilters(data); // Cập nhật state filters với dữ liệu
             } catch (error) {
                 console.error('Error fetching filters:', error);
             }
@@ -106,6 +114,7 @@ export const ApiList = <T extends Record<string, any>>({
 
         fetchFilters();
     }, []);
+
 
     const toggleDrawer = (newOpen: boolean) => () => {
         setFilterDrawerOpen(newOpen);
@@ -120,24 +129,29 @@ export const ApiList = <T extends Record<string, any>>({
 
     const DrawnerList = (
         <Box sx={{ width: 250 }} role="presentation">
-        <h1 className="text-center font-bold">Bộ lọc</h1>
-        {filters.map((filter) => (
-            <div key={filter.field} className="mb-4">
-                <h3 className="font-semibold">{filter.label}</h3>
-                {filter.options.map((option) => (
-                    <FormControlLabel
-                        key={option.value}
-                        control={
-                            <Checkbox
-                                onChange={() => handleFilterChange(filter.field, option.value)}
+            <h1 className="text-center font-bold">Bộ lọc</h1>
+            {filters.map((filter) => (
+                <div key={filter.field} className="mb-4 pl-2">
+                    <h3 className="font-semibold pt-3">{filter.label}</h3>
+                    <div className='flex flex-col'>
+                        {filter.options.map((option) => (
+                            <FormControlLabel
+                                key={option.value}
+                                control={
+                                    <Checkbox
+                                        checked={searchParams[filter.field] === option.value}
+                                        onChange={(e) =>
+                                            handleFilterChange(filter.field, e.target.checked ? option.value : null)
+                                        }
+                                    />
+                                }
+                                label={`${option.label}`}
                             />
-                        }
-                        label={`${option.label}`}
-                    />
-                ))}
-            </div>
-        ))}
-    </Box>
+                        ))}
+                    </div>
+                </div>
+            ))}
+        </Box>
     );
 
     return (
