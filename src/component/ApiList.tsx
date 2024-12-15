@@ -1,15 +1,14 @@
-// Updated List.tsx
 import React, { useEffect, useState } from 'react';
 import '../index.css';
-import { useSearchParams } from 'react-router-dom';
-import { Plus, Trash2 } from 'lucide-react';
+import { Plus, SearchIcon, SlidersHorizontalIcon, Trash2 } from 'lucide-react';
+import api from '../api';
+import { Box, Drawer } from '@mui/material';
 
-type ListProps<T> = {
+type ApiListProps<T> = {
     title: string;
     columns: string[]; // Array of column identifiers
     displayColumns?: string[]; // Optional array of display names corresponding to columns
-    data: T[];
-    filters?: string[];
+    filters?: T[]
     showPlusButton?: boolean; // Toggle for Plus button
     onPlusClick?: () => void; // Callback for Plus button
     showTrashButton?: boolean; // Toggle for Trash button
@@ -18,14 +17,24 @@ type ListProps<T> = {
     selectedRows?: number[]; // Array of selected row IDs
     onRowSelect?: (id: number) => void; // Callback for row selection
     onRowClick?: (item: T) => void;
+    apiEndpoint: string; // API endpoint for fetching data
 };
 
-export const List = <T extends Record<string, any>>({
+const useDebounce = (value, delay) => {
+    const [debouncedValue, setDebouncedValue] = useState(value);
+
+    useEffect(() => {
+        const handler = setTimeout(() => setDebouncedValue(value), delay);
+        return () => clearTimeout(handler);
+    }, [value, delay]);
+
+    return debouncedValue;
+};
+
+export const ApiList = <T extends Record<string, any>>({
     title,
     columns,
     displayColumns = [],
-    data,
-    filters = [],
     showPlusButton = false,
     onPlusClick,
     showTrashButton = false,
@@ -34,33 +43,50 @@ export const List = <T extends Record<string, any>>({
     selectedRows = [],
     onRowSelect,
     onRowClick,
-}: ListProps<T>) => {
-    const [searchParams, setSearchParams] = useSearchParams();
-    const [searchTerm, setSearchTerm] = useState<string>('');
-    const [searchField, setSearchField] = useState<string>(filters[0] || columns[0]);
+    apiEndpoint,
+}: ApiListProps<T>) => {
+    const [filterDrawerOpen, setFilterDrawerOpen] = useState(false);
+    const [searchParams, setSearchParams] = useState<{ [key: string]: string }>({});
+    const [data, setData] = useState<T[]>([]);
+    const debouncedFilters = useDebounce(searchParams, 500);
 
     useEffect(() => {
-        const paramField = searchParams.get('field');
-        const paramTerm = searchParams.get('term');
+        const fetchData = async () => {
+            try {
+                const response = await api.get(apiEndpoint);
+                const data = response.data;
+                setData(data);
+                console.log(data);
+            } catch (error) {
+                console.error('Error loading data:', error);
+            }
+        };
 
-        if (paramField && filters.includes(paramField)) {
-            setSearchField(paramField);
-        }
-        if (paramTerm) {
-            setSearchTerm(paramTerm);
-        }
-    }, [searchParams, filters]);
+        fetchData();
+    }, []);
 
-    const filteredData = data.filter((item) => {
-        const value = item[searchField as keyof T];
-        return value?.toString().toLowerCase().includes(searchTerm.toLowerCase());
-    });
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const queryParams = new URLSearchParams(debouncedFilters).toString();
+                const response = await api.get(`${apiEndpoint}?${queryParams}`);
+                setData(response.data);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
 
-    const handleSearchChange = (field: string, term: string) => {
-        setSearchParams({ field, term });
-        setSearchField(field);
-        setSearchTerm(term);
+        fetchData();
+    }, [debouncedFilters]);
+
+    const toggleDrawer = (newOpen: boolean) => () => {
+        setFilterDrawerOpen(newOpen);
     };
+
+    const DrawnerList = (
+        <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
+        </Box>
+    );
 
     return (
         <div className="flex flex-col pt-5">
@@ -73,28 +99,17 @@ export const List = <T extends Record<string, any>>({
                     {showTrashButton && onTrashClick && (
                         <Trash2 className="cursor-pointer" onClick={onTrashClick} />
                     )}
-                    {filters.length > 0 && (
-                        <select
-                            className="border rounded px-2 py-1"
-                            value={searchField}
-                            onChange={(e) => handleSearchChange(e.target.value, searchTerm)}
-                        >
-                            {filters.map((filter) => (
-                                <option key={filter} value={filter}>
-                                    {columns.includes(filter) 
-                                        ? displayColumns[columns.indexOf(filter)] || filter
-                                        : filter}
-                                </option>
-                            ))}
-                        </select>
-                    )}
-                    <input
-                        type="text"
-                        className="border rounded px-2 py-1"
-                        placeholder={`Tìm kiếm theo ${searchField}`}
-                        value={searchTerm}
-                        onChange={(e) => handleSearchChange(searchField, e.target.value)}
-                    />
+                    <div className="flex flex-row items-center gap-2 border-2 border-gray-400 rounded-2xl px-2.5 py-1 text-gray-400">
+                        <SearchIcon />
+                        <input
+                            type="text"
+                            className="border-none focus:ring-0 focus:outline-none"
+                            placeholder="Tìm kiếm..."
+                            value={searchParams.search}
+                            onChange={(e) => setSearchParams({ search: e.target.value })}
+                        />
+                        <SlidersHorizontalIcon className="cursor-pointer" onClick={toggleDrawer(true)} />
+                    </div>
                 </div>
             </div>
 
@@ -120,9 +135,9 @@ export const List = <T extends Record<string, any>>({
                     </thead>
 
                     <tbody>
-                        {filteredData.map((item) => (
+                        {data?.results?.map((item, index) => (
                             <tr
-                                key={item.id}
+                                key={index}
                                 onClick={() => onRowClick?.(item)} // Gọi hàm onRowClick nếu được cung cấp
                                 style={{ cursor: "pointer" }}
                             >
@@ -147,6 +162,9 @@ export const List = <T extends Record<string, any>>({
                     </tbody>
                 </table>
             </div>
+            <Drawer open={filterDrawerOpen} onClose={toggleDrawer(false)} anchor='right'>
+                {DrawnerList}
+            </Drawer>
         </div>
     );
 };
