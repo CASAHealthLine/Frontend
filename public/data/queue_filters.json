@@ -1,0 +1,48 @@
+[
+    {
+        "field": "status",
+        "label": "Status",
+        "options": [
+            {
+                "label": "Open",
+                "value": "open"
+            },
+            {
+                "label": "Closed",
+                "value": "closed"
+            }
+        ]
+    },
+    {
+        "field": "priority",
+        "label": "Priority",
+        "options": [
+            {
+                "label": "High",
+                "value": "high"
+            },
+            {
+                "label": "Medium",
+                "value": "medium"
+            },
+            {
+                "label": "Low",
+                "value": "low"
+            }
+        ]
+    },
+    {
+        "field": "type",
+        "label": "Type",
+        "options": [
+            {
+                "label": "Incident",
+                "value": "incident"
+            },
+            {
+                "label": "Request",
+                "value": "request"
+            }
+        ]
+    }
+]
