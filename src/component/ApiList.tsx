@@ -129,23 +129,28 @@ export const ApiList = <T extends Record<string, any>>({
 
     const DrawnerList = (
         <Box sx={{ width: 250 }} role="presentation">
-            <h1 className="text-center font-bold">Bộ lọc</h1>
+            <h1 className="text-center text-2xl font-bold pt-1">Bộ lọc tìm kiếm</h1>
             {filters.map((filter) => (
                 <div key={filter.field} className="mb-4 pl-2">
-                    <h3 className="font-semibold pt-3">{filter.label}</h3>
-                    <div className='flex flex-col'>
+                    <h3 className="font-semibold text-lg pt-2">{filter.label}</h3>
+                    <div className='flex flex-col pl-2'>
                         {filter.options.map((option) => (
                             <FormControlLabel
                                 key={option.value}
                                 control={
                                     <Checkbox
                                         checked={searchParams[filter.field] === option.value}
+                                        className="w-2 h-2 border-2 border-gray-500 rounded"
                                         onChange={(e) =>
                                             handleFilterChange(filter.field, e.target.checked ? option.value : null)
                                         }
                                     />
                                 }
-                                label={`${option.label}`}
+                                label={
+                                    <span className="ml-2 text-gray-700">
+                                        {option.label}
+                                    </span>
+                                }
                             />
                         ))}
                     </div>
