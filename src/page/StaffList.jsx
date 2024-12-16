@@ -1,15 +1,38 @@
-import { Plus, Table } from "lucide-react";
+import { Plus, Trash2, SlidersHorizontal, Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import "../styles/StaffList.css";
+
+const SearchButton = ({ content }) => {
+  return (
+    <button
+      type="button"
+      className="mx-1 rounded hover:bg-gray-200"
+      style={{ color: "gray" }}
+    >
+      {content}
+    </button>
+  );
+};
 
 export const StaffList = () => {
   return (
     <div className="m-2">
-      <div className="">
-        <h5 className="text-center">Danh sách nhân viên</h5>
-        <button type="button">
-          <Plus />
-        </button>
+      <div className="flow-root">
+        <h5 className="text-center float-left">Danh sách nhân viên</h5>
+        <div className="float-right flex">
+          <SearchButton content={<Plus />} />
+          <SearchButton content={<Trash2 />} />
+          <div className="rounded-md border-2 h-8 flex flex-row">
+            <div
+              className="mx-1 rounded hover:bg-gray-200"
+              style={{ color: "gray" }}
+            >
+              <Search />
+            </div>
+            <input className="align-middle" />
+            <SearchButton content={<SlidersHorizontal />} />
+          </div>
+        </div>
         <input />
       </div>
       <table className="table-auto w-full">
