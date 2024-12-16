@@ -1,7 +1,6 @@
 import { Plus, Trash2, SlidersHorizontal, Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import "../styles/StaffList.css";
-import { StaffInfo } from "../component/staff/StaffInfo";
 
 const SearchButton = ({ content }) => {
   return (
@@ -15,19 +14,19 @@ const SearchButton = ({ content }) => {
   );
 };
 
-const TableRow = ({ id, fullname, gender, dob, occupation }) => {
+const TableRow = ({ id, fullname, gender, dob, cccd }) => {
   return (
     <tr>
       <td>{id}</td>
       <td>{fullname}</td>
       <td>{gender}</td>
       <td>{dob}</td>
-      <td>{occupation}</td>
+      <td>{cccd}</td>
     </tr>
   );
 };
 
-export const StaffList = () => {
+export const PatientList = () => {
   return (
     <div className="m-2">
       <div className="flow-root">
@@ -63,7 +62,7 @@ export const StaffList = () => {
               <div>Ngày sinh</div>
             </th>
             <th>
-              <div>Chức vụ</div>
+              <div>Mã CCCD</div>
             </th>
           </tr>
         </thead>
@@ -73,25 +72,24 @@ export const StaffList = () => {
             fullname={"Nguyễn Văn A"}
             gender={"Nam"}
             dob={"01/03/2001"}
-            occupation={"Bác sĩ"}
+            cccd={"028307556775"}
           />
           <TableRow
             id={"1"}
             fullname={"Nguyễn Văn A"}
             gender={"Nam"}
             dob={"01/03/2001"}
-            occupation={"Bác sĩ"}
+            cccd={"028307556775"}
           />
           <TableRow
             id={"1"}
             fullname={"Nguyễn Văn A"}
             gender={"Nam"}
             dob={"01/03/2001"}
-            occupation={"Bác sĩ"}
+            cccd={"028307556775"}
           />
         </tbody>
       </table>
-      <StaffInfo />
     </div>
   );
 };

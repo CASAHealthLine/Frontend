@@ -3,6 +3,8 @@ import { Sidebar } from './component/Sidebar';
 import { Topbar } from './component/Topbar';
 import { StaffList } from './page/StaffList';
 import { Queueinfo } from './component/Queueinfo';
+import { PatientList } from './page/PatientList';
+import { PatientInformation } from './page/PatientInformation';
 
 function App() {
   return (
