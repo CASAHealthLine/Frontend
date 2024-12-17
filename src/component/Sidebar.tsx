@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext }from 'react';
 import { Sidebar as ProSidebar, Menu, MenuItem, SubMenu, menuClasses, SidebarProps } from 'react-pro-sidebar';
 import { IdCard, LayoutGrid, Users, Network, ChartColumnBig, Stethoscope, PillBottle, Settings, LogOut } from 'lucide-react';
+import { useSelector } from 'react-redux';
 import { NavbarBrand } from 'react-bootstrap';
 import '../styles/Sidebar.css';
 import { SidebarHeader, Typography } from './Typography';
@@ -10,14 +11,14 @@ import { useBreakpointSidebar, useToggleSidebar } from '../contexts/SidebarProvi
 import api from '../api';
 
 const menuItems = [
-  { icon: <LayoutGrid />, to: '/', label: 'Trang chủ' },
-  { icon: <IdCard />, to: '/patient-list', label: 'Bệnh nhân' },
-  { icon: <IdCard />, to: '/patient', label: 'Thông tin' },
-  { icon: <Users />, to: '/queue', label: 'Hàng đợi' },
-  { icon: <Network />, to: '/staff', label: 'Nhân viên' },
-  { icon: <ChartColumnBig />, to: '/statistic', label: 'Thống kê' },
-  { icon: <Stethoscope />, to: '/rooms', label: 'Phòng khám' },
-  { icon: <PillBottle />, to: '/test', label: 'Xét nghiệm' },
+  { icon: <LayoutGrid />, to: '/', label: 'Trang chủ', roles: ['admin', 'doctor', 'patient'] },
+  { icon: <IdCard />, to: '/patient-list', label: 'Bệnh nhân', roles: ['admin', 'doctor'] },
+  { icon: <IdCard />, to: '/profile', label: 'Thông tin', roles: ['patient', 'doctor'] },
+  { icon: <Users />, to: '/queue', label: 'Hàng đợi', roles: ['admin', 'doctor'] },
+  { icon: <Network />, to: '/staff', label: 'Nhân viên', roles: ['admin'] },
+  { icon: <ChartColumnBig />, to: '/statistic', label: 'Thống kê', roles: ['admin'] },
+  { icon: <Stethoscope />, to: '/rooms', label: 'Phòng khám', roles: ['admin'] },
+  { icon: <PillBottle />, to: '/test', label: 'Xét nghiệm', roles: ['admin'] },
 ];
 
 const StyledMenu = ({ children, collapsed, ...props }) => {
@@ -49,6 +50,7 @@ export const Sidebar = ({...props}: SidebarProps) => {
   const { sidebarToggled, setSidebarToggled } = useToggleSidebar();
   const navigate = useNavigate();
   const {setSidebarBreakpoint} = useBreakpointSidebar();
+  const user = useSelector((state: any) => state.user);
 
   useEffect(() => {
     const handleResize = () => {
@@ -146,7 +148,7 @@ export const Sidebar = ({...props}: SidebarProps) => {
               TỔNG QUAN
             </Typography>
             {menuItems.map((item, index) => (
-              <StyledMenuItem key={index} icon={item.icon} to={item.to}>{item.label}</StyledMenuItem>
+              item.roles.includes(user?.role) && <StyledMenuItem key={index} icon={item.icon} to={item.to}>{item.label}</StyledMenuItem>
             ))}
           </StyledMenu>
 

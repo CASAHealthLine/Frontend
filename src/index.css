@@ -6,6 +6,8 @@
     --primary-text-color: #171717;
     --secondary-text-color: white;
     --primary-bg-color: #24c38c;
+    --secondary-bg-color: #61b0ff;
+    --component-bg-color: #fbfbff;
 }
 
 html, body {

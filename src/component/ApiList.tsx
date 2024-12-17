@@ -29,6 +29,7 @@ type Filter = {
     field: string;
     label: string;
     options: FilterOption[];
+    apiEndpoint: string;
 };
 
 const useDebounce = (value, delay) => {
@@ -79,6 +80,7 @@ export const ApiList = <T extends Record<string, any>>({
     }, []);
 
     // Fetch filtered API data
+    // Fetch filtered API data
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -105,7 +107,6 @@ export const ApiList = <T extends Record<string, any>>({
                 }
 
                 const data = await response.json(); // Parse dữ liệu JSON
-                console.log('API response:', data);
                 setFilters(data); // Cập nhật state filters với dữ liệu
             } catch (error) {
                 console.error('Error fetching filters:', error);

@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import api from '../api';
-import { clearAuthenticated, setAuthenticated } from '../slices/authSlice';
+import { clearUser, setUser } from '../slices/userSlice';
 
 function useAuthValidation() {
   const dispatch = useDispatch();
@@ -10,12 +10,12 @@ function useAuthValidation() {
 
   useEffect(() => {
     const validateAuth = async () => {
-      api.get('/auth/protected/')
-        .then(() => {
-          dispatch(setAuthenticated());
+      api.get('/auth/account/')
+        .then(({ data }) => {
+          dispatch(setUser(data));
         })
         .catch(() => {
-          dispatch(clearAuthenticated());
+          dispatch(clearUser());
           navigate('/login');
         });
     };

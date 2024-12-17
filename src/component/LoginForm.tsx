@@ -24,7 +24,6 @@ export const LoginForm = () => {
       password: (e.target as any)[1].value
     }).then((res) => {
       localStorage.setItem('access_token', res.data.access);
-      sessionStorage.setItem('user', JSON.stringify(res.data.user));
       navigate('/'); // Chuyển hướng về trang chính
     }).catch((err) => {
       setError('Số điện thoại hoặc mật khẩu không đúng');
