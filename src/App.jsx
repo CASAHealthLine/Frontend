@@ -15,7 +15,7 @@ function App() {
           <Topbar />
           <Routes>
           </Routes>
-          <StaffList/>
+          <PatientInformation/>
         </div>
       </div>
     </BrowserRouter>

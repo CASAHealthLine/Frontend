@@ -12,7 +12,7 @@ tbody tr:nth-child(even) {
 
 tbody tr:hover {
   background-color: var(--secondary-bg-color);
-  @apply rounded-md;
+  @apply rounded-md cursor-pointer;
 }
 
 th div {

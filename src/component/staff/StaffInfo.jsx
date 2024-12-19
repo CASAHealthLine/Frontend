@@ -31,7 +31,7 @@ export const StaffInfo = (info) => {
         <TableRow label="Số Điện Thoại" content="012345678" />
         <TableRow label="Chức vụ" content="Bác sĩ" />
       </table>
-      <div className="flex">
+      <div className="flex justify-center">
         <button className="flex rounded-md px-2 py-1 mx-1 text-white shadow-md"
         style={{backgroundColor: "var(--primary-bg-color)"}}><Save/>Lưu</button>
         <button className="flex rounded-md px-2 py-1 mx-1 text-white shadow-md"
